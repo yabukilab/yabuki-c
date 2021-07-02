@@ -1,53 +1,77 @@
--- MariaDB dump 10.19  Distrib 10.4.18-MariaDB, for Win64 (AMD64)
+-- phpMyAdmin SQL Dump
+-- version 5.1.1
+-- https://www.phpmyadmin.net/
 --
--- Host: localhost    Database: mydb2
--- ------------------------------------------------------
--- Server version	10.4.18-MariaDB
+-- ホスト: 127.0.0.1
+-- 生成日時: 2021-07-02 09:45:19
+-- サーバのバージョン： 10.4.19-MariaDB
+-- PHP のバージョン: 8.0.7
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `table2`
+-- データベース: `mydb2`
 --
 
-DROP TABLE IF EXISTS `table2`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `table2` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `varcharA` varchar(40) NOT NULL,
-  `intA` int(11) NOT NULL,
-  `intB` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `table2`
+-- テーブルの構造 `kutikomi`
 --
 
-LOCK TABLES `table2` WRITE;
-/*!40000 ALTER TABLE `table2` DISABLE KEYS */;
-INSERT INTO `table2` VALUES (1,'あ',1280,1),(2,'い',2980,0),(3,'う',198,121);
-/*!40000 ALTER TABLE `table2` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+CREATE TABLE `kutikomi` (
+  `id` int(11) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `class` int(11) NOT NULL,
+  `point` int(11) NOT NULL,
+  `thoughts` varchar(150) NOT NULL,
+  `day` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+--
+-- テーブルのデータのダンプ `kutikomi`
+--
+
+INSERT INTO `kutikomi` (`id`, `name`, `class`, `point`, `thoughts`, `day`) VALUES
+(1, 'ogasawara', 100, 5, 'おすすめ！', '2021-05-23'),
+(2, 'ogasawara', 101, 5, 'おすすめ！', '2021-05-23'),
+(3, 'katou', 200, 5, 'おすすめ！', '2021-05-23'),
+(4, 'katou', 201, 5, 'おすすめ！', '2021-05-23'),
+(5, 'kounosu', 300, 5, 'おすすめ！', '2021-05-23'),
+(6, 'kounosu', 301, 5, 'おすすめ！', '2021-05-23'),
+(7, 'shimoda', 400, 5, 'おすすめ！', '2021-05-23'),
+(8, 'shimomura', 500, 5, 'おすすめ！', '2021-05-23'),
+(9, 'shimomura', 501, 5, 'おすすめ！', '2021-05-23');
+
+--
+-- ダンプしたテーブルのインデックス
+--
+
+--
+-- テーブルのインデックス `kutikomi`
+--
+ALTER TABLE `kutikomi`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- ダンプしたテーブルの AUTO_INCREMENT
+--
+
+--
+-- テーブルの AUTO_INCREMENT `kutikomi`
+--
+ALTER TABLE `kutikomi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2021-06-25 14:24:48
