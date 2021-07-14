@@ -104,7 +104,7 @@ body {
   </div>
  
   <div class="login2">
-  <form action="login.php" method="post">
+  <form action="index.php" method="post">
     <ul style="list-style-type: none;" class="login">
       <li>ユーザＩＤ<input type="text" name="username" placeholder="ユーザID" /></li>
       <li>パスワード<input type="password" name="password" placeholder="パスワード" /></li>
