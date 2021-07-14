@@ -105,47 +105,7 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
--- --------------------------------------------------------
 
---
--- テーブルの構造 `userinfo`
---
 
-CREATE TABLE `userinfo` (
-  `id` int(11) NOT NULL,
-  `username` varchar(30) NOT NULL,
-  `passwd` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- テーブルのデータのダンプ `userinfo`
---
-
-INSERT INTO `userinfo` (`id`, `username`, `passwd`) VALUES
-(1, '2242097', '1234');
-
---
--- ダンプしたテーブルのインデックス
---
-
---
--- テーブルのインデックス `userinfo`
---
-ALTER TABLE `userinfo`
-  ADD PRIMARY KEY (`id`);
-
---
--- ダンプしたテーブルの AUTO_INCREMENT
---
-
---
--- テーブルの AUTO_INCREMENT `userinfo`
---
-ALTER TABLE `userinfo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
