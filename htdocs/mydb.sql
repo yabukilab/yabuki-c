@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: 127.0.0.1
--- 生成日時: 2021-07-14 05:28:13
+-- 生成日時: 2021-07-14 09:24:32
 -- サーバのバージョン： 10.4.19-MariaDB
 -- PHP のバージョン: 8.0.7
 
@@ -80,6 +80,25 @@ INSERT INTO `kutikomi` (`id`, `name`, `class`, `point`, `thoughts`, `day`) VALUE
 (69, 'seki', 600, 5, '良かった', '2021-07-09'),
 (71, 'takuma', 700, 3, 'よい', '0000-00-00');
 
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `userinfo`
+--
+
+CREATE TABLE `userinfo` (
+  `id` int(11) NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `passwd` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- テーブルのデータのダンプ `userinfo`
+--
+
+INSERT INTO `userinfo` (`id`, `username`, `passwd`) VALUES
+(1, '2242097', '1234');
+
 --
 -- ダンプしたテーブルのインデックス
 --
@@ -91,6 +110,12 @@ ALTER TABLE `kutikomi`
   ADD PRIMARY KEY (`id`);
 
 --
+-- テーブルのインデックス `userinfo`
+--
+ALTER TABLE `userinfo`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- ダンプしたテーブルの AUTO_INCREMENT
 --
 
@@ -99,13 +124,14 @@ ALTER TABLE `kutikomi`
 --
 ALTER TABLE `kutikomi`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+
+--
+-- テーブルの AUTO_INCREMENT `userinfo`
+--
+ALTER TABLE `userinfo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-
-
-
-
