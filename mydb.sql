@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: 127.0.0.1
--- 生成日時: 2021-07-14 09:24:32
+-- 生成日時: 2021-07-14 10:14:35
 -- サーバのバージョン： 10.4.19-MariaDB
 -- PHP のバージョン: 8.0.7
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- データベース: `mydb2`
+-- データベース: `mydb`
 --
 
 -- --------------------------------------------------------
@@ -78,7 +78,8 @@ INSERT INTO `kutikomi` (`id`, `name`, `class`, `point`, `thoughts`, `day`) VALUE
 (67, 'ogasawara', 100, 4, '良かった', '2021-07-09'),
 (68, 'ogasawara', 100, 4, '面白かった', '2021-07-09'),
 (69, 'seki', 600, 5, '良かった', '2021-07-09'),
-(71, 'takuma', 700, 3, 'よい', '0000-00-00');
+(71, 'takuma', 700, 3, 'よい', '0000-00-00'),
+(72, 'ogasawara', 100, 3, '面白かった', '2021-07-14');
 
 -- --------------------------------------------------------
 
@@ -123,7 +124,7 @@ ALTER TABLE `userinfo`
 -- テーブルの AUTO_INCREMENT `kutikomi`
 --
 ALTER TABLE `kutikomi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- テーブルの AUTO_INCREMENT `userinfo`
