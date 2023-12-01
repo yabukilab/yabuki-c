@@ -1,19 +1,23 @@
-h1{
+h1 {
     background-color: #f93566;
-    padding: 20px;
-    font-size: 50px;
-    text-align: left;
-    margin-left: -310px;
-    margin-right: -50px;
     
+   
+padding: 20px;
+    font-size: 50px;
+    text-align: center; /* テキストを中央揃えに変更 */
 }
 
-h2{
+h2 {
     font-size: 35px;
 }
 
-body{
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    margin: 20px;
+body {
+    
+   
+font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
+   
+margin: 20px;
     background-color: #FDF0D5;
+    text-align: center; /* ページ全体のテキストを中央揃えに変更 */
 }
