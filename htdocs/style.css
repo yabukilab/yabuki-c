@@ -1,12 +1,19 @@
-tytle{
-    text-align: center;
-    background-color:bisque;
-    color:hotpink;
-    font-size: 100px;
+h1{
+    background-color: #ff0000;
+    padding: 20px;
+    font-size: 50px;
+    text-align: left;
+    margin-left: -310px;
+    margin-right: -50px;
+    
+}
+
+h2{
+    font-size: 35px;
 }
 
 body{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     margin: 20px;
-    background-color:#FDF0D5;
+    background-color: #FDF0D5;
 }
