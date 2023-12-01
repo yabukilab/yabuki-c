@@ -1,0 +1,72 @@
+h1{
+    text-align: center;
+    color:#ffffff;
+    font-size: 100px;
+    font-family:"Kokoro" ;
+    text-shadow: 5px 5px 5px #f93566;
+}
+
+h2{
+    text-align: center;
+    color: #ffffff;
+    font-size: 40px;
+    font-family:"Kokoro" ;
+    text-shadow: 5px 5px 5px #f93566;
+}
+
+body{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 20px;
+    background:url(https://anniversarys-mag.jp/img/p/pixta_47613288_M.jpg?w=730)center center/cover no-repeat;
+    background-size:cover;
+}
+
+nav{
+    text-align: center;
+}
+
+.place-container{
+    display: inline-block;
+    margin: 10px;
+    padding: 10px;
+    border: 3px solid #d86a03;
+    border-radius: 5px;
+    background-color: #fb8c24c7;
+}
+
+.food-container{
+    display: inline-block;
+    margin: 10px;
+    padding: 10px;
+    border: 3px solid #f93566;
+    border-radius: 5px;
+    background-color: #fb6f92c9;
+}
+
+.event-container{
+    display: inline-block;
+    margin: 10px;
+    padding: 10px;
+    border: 3px solid #9a0505;
+    border-radius: 10px;
+    background-color: #ff0000c9;
+}
+
+
+nav a {
+    text-decoration: none;
+    font-size: 50px;
+    margin: 50px;
+}
+
+nav a.place{
+    color:#ffffff ;
+}
+
+nav a.food{
+    color:#ffffff;
+}
+
+nav a.event{
+    color:#ffffff;
+}
