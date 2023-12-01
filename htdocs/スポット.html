@@ -9,20 +9,23 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-direction: row;
         }
 
         #table-of-contents {
+            flex: 0 50 250px;
             padding: 20px;
             background-color: #f0f0f0;
-            width: 100%;
-            margin-top: 20px;
+            position: sticky;
+            height: 50vh;
+            width: 250px;
+            margin-top: 190px;
+            margin-left: 100px;
+            
         }
 
         h1 {
             color: #ffffff;
-            text-align: center;
         }
 
         h2 {
@@ -34,33 +37,21 @@
         }
 
         .date-spots {
+            flex: 1; /* 右側の幅を調整 */
             margin-top: 20px;
             padding: 20px;
-            box-sizing: border-box;
-            width: 100%;
+        }
+        body {
+            display: flex;
+            flex: 0 0 100px;
+           justify-content: center;
+            height: auto;
+            margin-top: -70px;
+            margin-left: -100px;
+            width: auto;
         }
 
-        /* メディアクエリ */
-        @media only screen and (min-width: 600px) {
-            body {
-                flex-direction: row;
-            }
-
-            #table-of-contents {
-                flex: 0 0 250px;
-                margin-top: 190px;
-            }
-
-            .date-spots {
-                flex: 1;
-                margin-top: 0;
-                margin-left: 20px;
-            }
-        }
-
-        iframe {
-            width: 100%;
-        }
+        
     </style>
 </head>
 <body>
@@ -76,42 +67,31 @@
     </div>
 
     <div class="date-spots">
-        <h1>スポット</h1>
+        <h1>　　スポット</h1>
+        
 
         <h2 id="mall">カラオケまねきねこ</h2>
-        <img src="まねきねこ.jpg" alt="代替テキスト" width="100%">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.412985626597!2d140.0218275!3d35.6914535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60228138d781aa6d%3A0x4a84d8413cf78a35!2z44Kr44Op44Kq44Kx44G-44Gt44GN44Gt44GTIOa0peeUsOayvOWMl-WPo-W6lw!5e0!3m2!1sja!2sjp!4v1701406659467!5m2!1sja!2sjp" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <img src="まねきねこ.jpg" alt="代替テキスト" width="400" height="300">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.412985626597!2d140.0218275!3d35.6914535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60228138d781aa6d%3A0x4a84d8413cf78a35!2z44Kr44Op44Kq44Kx44G-44Gt44GN44Gt44GTIOa0peeUsOayvOWMl-WPo-W6lw!5e0!3m2!1sja!2sjp!4v1701406659467!5m2!1sja!2sjp" width="300" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         <p>JR津田沼駅北口徒歩6分<br>営業時間：24時間営業</p>
         <p>学割が使えるため昼間から安く利用することができます。また、ドリンクバーを頼めば持ち込みありのルーム料金無料で利用することができます。</p>
-
         <h2 id="karaoke">津田沼PARCO</h2>
-        <img src="PARCO.jpg" alt="代替テキスト" width="100%">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.4222425858125!2d140.0194275653289!3d35.69122564545332!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60228160b11febdf%3A0x3a40a3537c890124!2z44OX44Os44Kk44Ok44O844K66Ieq55Sx44GM5LiYIOa0peeUsOayvOODkeODq-OCs-W6lw!5e0!3m2!1sja!2sjp!4v1701406537644!5m2!1sja!2sjp" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <img src="PARCO.jpg" alt="代替テキスト" width="400" height="300">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.4222425858125!2d140.0194275653289!3d35.69122564545332!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60228160b11febdf%3A0x3a40a3537c890124!2z44OX44Os44Kk44Ok44O844K66Ieq55Sx44GM5LiYIOa0peeUsOayvOODkeODq-OCs-W6lw!5e0!3m2!1sja!2sjp!4v1701406537644!5m2!1sja!2sjp" width="300" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         <p>JR津田沼駅北口徒歩2分<br>営業時間：10:00~20:00</p>
-        
-       
-<p>駅に直結していて行きやすい！<br>たくさんの店舗が入っておりショッピング好きなカップルにはおすすめ。</p>
+        <p>駅に直結していて行きやすい！<br>たくさんの店舗が入っておりショッピング好きなカップルにはおすすめ。</p>
 
-        
-
-       
-<h2 id="park">モリシア津田沼</h2>
-        <img src="モリシア.jpg" alt="代替テキスト" width="100%">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.4873999495467!2d140.0190385!3d35.689621800000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6022813d496f45b9%3A0x8db2fcd741140f12!2z44Oi44Oq44K344Ki5rSl55Sw5rK8!5e0!3m2!1sja!2sjp!4v1701406721271!5m2!1sja!2sjp" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        
-        <
-<p>JR津田沼駅南口徒歩3分<br>営業時間：10:00~21:00</p>
+        <h2 id="park">モリシア津田沼</h2>
+        <img src="モリシア.jpg" alt="代替テキスト" width="400" height="300">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.4873999495467!2d140.0190385!3d35.689621800000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6022813d496f45b9%3A0x8db2fcd741140f12!2z44Oi44Oq44K344Ki5rSl55Sw5rK8!5e0!3m2!1sja!2sjp!4v1701406721271!5m2!1sja!2sjp" width="300" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <p>JR津田沼駅南口徒歩3分<br>営業時間：10:00~21:00</p>
         <p>コンサートホールが隣接しているためついでの暇つぶしに最適。また、イベントが行われるので楽しむことができます。</p>
 
         <h2 id="shrine">AEON</h2>
-        <img src="AEON.jpg" alt="代替テキスト" width="100%">
-        
-        <
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.460749789253!2d140.025!3d35.690277800000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60228024332470a5%3A0xe24f6d48be58cc73!2z44Kk44Kq44Oz44Oi44O844OrIOa0peeUsOayvA!5e0!3m2!1sja!2sjp!4v1701406754340!5m2!1sja!2sjp" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <img src="AEON.jpg" alt="代替テキスト" width="400" height="300">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.460749789253!2d140.025!3d35.690277800000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60228024332470a5%3A0xe24f6d48be58cc73!2z44Kk44Kq44Oz44Oi44O844OrIOa0peeUsOayvA!5e0!3m2!1sja!2sjp!4v1701406754340!5m2!1sja!2sjp" width="300" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         <p>京成津田沼駅徒歩2分<br>営業時間：10:00~22:00</p>
-        
-        <
-<p>オリジナルブランドが多くあるのが人気な理由の一つ。ゲームセンターがあるので放課後デートにおすすめです。</p>
+        <p>オリジナルブランドが多くあるのが人気な理由の一つ。ゲームセンターがあるので放課後デートにおすすめです。</p>
     </div>
 
 </body>
