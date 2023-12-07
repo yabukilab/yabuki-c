@@ -1,23 +1,65 @@
-h1 {
+h1{
     background-color: #f93566;
-    
-   
-padding: 20px;
+    padding: 20px;
     font-size: 50px;
-    text-align: center; /* テキストを中央揃えに変更 */
+    text-align: left;
+    margin-left: -310px;
+    margin-right: -50px;
+    
 }
 
-h2 {
+h2{
     font-size: 35px;
 }
 
-body {
+#table-of-contents {
+    flex: 0 50 250px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    position: sticky;
+    height: 50vh;
+    width: 250px;
+    margin-top: 190px;
+    margin-left: 100px;
     
-   
-font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    
-   
-margin: 20px;
+}
+
+body{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 20px;
     background-color: #FDF0D5;
-    text-align: center; /* ページ全体のテキストを中央揃えに変更 */
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        background-color: #f93566;
+        padding: 15px; /* パディングを調整 */
+        font-size: 30px; /* フォントサイズを調整 */
+        text-align: center; /* 中央揃えに変更 */
+        margin-bottom: 50px; /* マージンをリセット */
+    }
+    
+    h2 {
+        font-size: 25px; /* フォントサイズを調整 */
+
+    }
+    
+    #table-of-contents {
+        flex: 0 100%; /* 幅を100%に変更 */
+        padding: 15px; /* パディングを調整 */
+        background-color: #f0f0f0;
+        
+        /* トップに固定 */
+        width: 100%; /* 幅を100%に変更 */
+        margin-bottom: 1000px; /* マージンをリセット */
+        margin-right: -100px;
+    }
+    
+    body {
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        margin: 10px; /* 余白を調整 */
+        background-color: #FDF0D5;
+        margin-right: -5px;
+    }
+	/* 480px以下に適用されるCSS（スマホ用） */
 }
