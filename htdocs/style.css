@@ -48,11 +48,10 @@ body{
         flex: 0 100%; /* 幅を100%に変更 */
         padding: 15px; /* パディングを調整 */
         background-color: #f0f0f0;
-        
-        /* トップに固定 */
+        position: sticky;
+        top: 0; /* トップに固定 */
         width: 100%; /* 幅を100%に変更 */
-        margin-bottom: 1000px; /* マージンをリセット */
-        margin-right: -100px;
+        margin: 0; /* マージンをリセット */
     }
     
     body {
