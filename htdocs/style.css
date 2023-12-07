@@ -50,7 +50,7 @@ body{
         background-color: #f0f0f0;
         position: sticky;
         top: 0; /* トップに固定 */
-        width: 100%; /* 幅を100%に変更 */
+        width: 1%; /* 幅を100%に変更 */
         margin: 0; /* マージンをリセット */
     }
     
