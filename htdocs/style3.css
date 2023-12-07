@@ -1,6 +1,3 @@
-@media screen and(max-width:480px) {
-    
-}
 ul {
     font-size: 20px;
 }
@@ -26,4 +23,37 @@ body{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     margin: 20px;
     background-color: #FDF0D5;
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        background-color: #ff0000;
+        padding: 15px; /* パディングを調整 */
+        font-size: 30px; /* フォントサイズを調整 */
+        text-align: center; /* 中央揃えに変更 */
+        margin-bottom: 50px; /* マージンをリセット */
+    }
+    
+    h2 {
+        font-size: 25px; /* フォントサイズを調整 */
+
+    }
+    
+    #table-of-contents {
+        flex: 0 100%; /* 幅を100%に変更 */
+        padding: 15px; /* パディングを調整 */
+        background-color: #f0f0f0;
+        position: sticky;
+        top: 0; /* トップに固定 */
+        width: 100%; /* 幅を100%に変更 */
+        margin: 0; /* マージンをリセット */
+    }
+    
+    body {
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        margin: 10px; /* 余白を調整 */
+        background-color: #FDF0D5;
+        margin-right: -5px;
+    }
+	/* 480px以下に適用されるCSS（スマホ用） */
 }
