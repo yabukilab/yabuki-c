@@ -25,6 +25,16 @@ body{
     background-color: #FDF0D5;
 }
 
+body {
+    display: flex;
+    flex: 0 0 100px;
+   justify-content: center;
+    height: auto;
+    margin-top: -70px;
+    margin-left: -100px;
+    width: auto;
+
+}
 #table-of-contents {
     flex: 0 50 250px;
     padding: 20px;
