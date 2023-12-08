@@ -12,6 +12,9 @@ h2{
     font-size: 35px;
 }
 
+h3{
+    font-size: 35px;
+}
 #table-of-contents {
     flex: 0 50 250px;
     padding: 20px;
@@ -41,22 +44,33 @@ body{
     
     h2 {
         font-size: 25px; /* フォントサイズを調整 */
+        margin-top: 10px;
 
+    }
+
+    h3{
+        font-size: 35px;
     }
     
     #table-of-contents {
-        flex: 0 100%; /* 幅を100%に変更 */
-        padding: 15px; /* パディングを調整 */
+        flex: 100 50 250px;
+        padding: 20px;
         background-color: #f0f0f0;
-        position: sticky;
-        top: 0; /* トップに固定 */
-        width: 100%; /* 幅を100%に変更 */
-        margin: 0; /* マージンをリセット */
+        position:relative;
+        left: -50px;
+        height: 50px;
+        width: 50px;
+        margin-top: 190px;
+        margin-left: 1px;
+    
     }
+
+    
+    
     
     body {
         font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-        margin: 10px; /* 余白を調整 */
+        margin: 10%; /* 余白を調整 */
         background-color: #FDF0D5;
         margin-right: -5px;
     }

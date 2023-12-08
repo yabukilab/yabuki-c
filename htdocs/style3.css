@@ -25,6 +25,17 @@ body{
     background-color: #FDF0D5;
 }
 
+#table-of-contents {
+    flex: 0 50 250px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    position: sticky;
+    height: 50vh;
+    width: 250px;
+    margin-top: 190px;
+    margin-left: 100px;
+    }
+
 @media screen and (max-width: 480px) {
     h1 {
         background-color: #ff0000;
@@ -40,13 +51,16 @@ body{
     }
     
     #table-of-contents {
-        flex: 0 100%; /* 幅を100%に変更 */
-        padding: 15px; /* パディングを調整 */
+        flex: 100 50 250px;
+        padding: 20px;
         background-color: #f0f0f0;
-        position: sticky;
-        top: 0; /* トップに固定 */
-        width: 100%; /* 幅を100%に変更 */
-        margin: 0; /* マージンをリセット */
+        position:relative;
+        left: -50px;
+        height: 50px;
+        width: 50px;
+        margin-top: 190px;
+        margin-left: 1px;
+    
     }
     
     body {
