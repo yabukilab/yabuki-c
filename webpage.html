@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クッキングパパパット</title>
+    <style>
+        /* リセットCSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* フルスクリーン表示用のスタイル */
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #ff7f50;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* ヘッダーに影を追加 */
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+            transition: color 0.3s ease; /* ホバー時に色が変化するトランジションを追加 */
+        }
+
+        nav ul li:hover {
+            color: #ff0000; /* ホバー時のテキストの色を赤色に変更 */
+        }
+
+        nav ul li:last-child {
+            margin-right: 0;
+        }
+
+        main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px;
+            flex-wrap: wrap; /* 子要素が折り返すようにする */
+        }
+
+        section {
+            flex-basis: calc(50% - 20px); /* 親要素の50%幅に設定 */
+            margin-bottom: 30px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px; /* セクションに角丸を追加 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* セクションに影を追加 */
+            overflow: hidden; /* アニメーションのためにオーバーフローを隠す */
+        }
+
+        .search-box {
+            flex-basis: calc(50% - 20px); /* 親要素の50%幅に設定 */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* フッターに影を追加 */
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .small-img {
+            width: 100px; /* 画像を小さくする */
+            height: auto; /* アスペクト比を保持する */
+        }
+
+        /* スマートフォン用のスタイル */
+        @media screen and (max-width: 768px) {
+            main {
+                flex-direction: column;
+                align-items: center;
+            }
+            section {
+                flex-basis: 100%;
+            }
+            .search-box {
+                flex-basis: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>クッキングパパパット</h1>
+        <nav>
+            <ul>
+                <li><a href="#">ホーム</a></li>
+                <li><a href="#">レシピ一覧</a></li>
+                <li><a href="#">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>レシピ検索</h2>
+            <img src="https://prtimes.jp/i/5118/285/ogp/d5118-285-552466-0.jpg" alt="おすすめレシピの画像" class="small-img">
+            <p>ここからレシピを検索できます。</p>
+        </section>
+
+        <section>
+            <h2>レシピ登録</h2>
+            <img src="https://prtimes.jp/i/5118/285/ogp/d5118-285-552466-0.jpg" alt="最新レシピの画像" class="small-img">
+            <p>ここから新たな料理を登録できます。</p>
+        </section>
+
+        <div class="search-box">
+            <h2>おすすめのレシピ</h2>
+            <img src="https://prtimes.jp/i/5118/285/ogp/d5118-285-552466-0.jpg" alt="料理の画像" class="small-img">
+            <!-- 料理名検索フォームをここに追加 -->
+        </div>
+
+        <div class="search-box">
+            <h2>最新のレシピ</h2>
+            <img src="https://prtimes.jp/i/5118/285/ogp/d5118-285-552466-0.jpg" alt="食材の画像" class="small-img">
+            <!-- 食材検索フォームをここに追加 -->
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 クッキングパパパット. All rights reserved.</p>
+    </footer>
+</body>
+</html>
