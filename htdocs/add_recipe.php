@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>レシピ追加成功しました</title>
+    <title>レシピ登録成功しました</title>
     <link rel="stylesheet" type="text/css" href="cookstyle.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
         </nav>
     </header>
 <div class="container">
-    <h1>レシピの追加に成功しました</h1>
+    <h1>レシピの登録に成功しました</h1>
     <?php
     // データベース接続情報の設定
     $dbServer = isset($_ENV['MYSQL_SERVER'])    ? $_ENV['MYSQL_SERVER']      : '127.0.0.1';

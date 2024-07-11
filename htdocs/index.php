@@ -16,7 +16,7 @@
         </nav>
     </header>
 <div class="container">
-    <h2>レシピ追加</h2>
+    <h2>レシピ登録</h2>
     <form action="add_recipe.php" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="name">料理名:</label>
@@ -34,7 +34,7 @@
             <label for="image">料理の写真:</label>
             <input type="file" id="image" name="image" accept="image/*">
         </div>
-        <button type="submit">追加</button>
+        <button type="submit">登録</button>
     </form>
     <br>
     <a href="webpage.html" class="btn btn-primary">戻る</a>
