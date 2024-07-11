@@ -16,9 +16,9 @@
         </nav>
     </header>
 <div class="container">
-    <h1>レシピ追加成功しました</h1>
+    <h1>レシピの追加に成功しました</h1>
     <?php
-    $conn = new mysqli('localhost', 'root', '', 'recipe_db');
+    $conn = new mysqli('127.0.0.1', 'testuser', 'pass', 'recipe_db');
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
