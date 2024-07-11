@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #ff7f50;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* ヘッダーに影を追加 */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 36px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+    transition: color 0.3s ease; /* ホバー時に色が変化するトランジションを追加 */
+}
+
+nav ul li:hover {
+    color: #ff0000; /* ホバー時のテキストの色を赤色に変更 */
+}
+
+nav ul li:last-child {
+    margin-right: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    color: #343a40;
+    text-align: center;
+}
+
+.recipe-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.recipe-card h3 {
+    color: #343a40;
+    text-align: center;
+}
+
+.recipe-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.recipe-details {
+    padding: 0 20px;
+}
+
+.recipe-details h4 {
+    color: #343a40;
+}
+
+.recipe-details ul, .recipe-details ol {
+    margin: 0;
+    padding: 0 20px;
+}
+
+.recipe-details li {
+    margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    button {
+        padding: 8px;
+    }
+}

@@ -1,92 +1,71 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-<link rel="stylesheet" href="cookstyle.css">
-    <meta charset="UTF-8">
-    <title>レシピ追加</title>
-    <style>
-        .recipe {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin: 10px 0;
-        }
-        .recipe img {
-            max-width: 200px;
-            height: auto;
-            display: block;
-            margin: 10px 0;
-        }
-    </style>
+    <title>レシピ追加成功しました</title>
+    <link rel="stylesheet" type="text/css" href="cookstyle.css">
 </head>
 <body>
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "recipe_db";
-
-// データベース接続
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// 接続チェック
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // フォームデータの取得
-    $name = $_POST['name'];
-    $ingredients = $_POST['ingredients'];
-    $instructions = $_POST['instructions'];
-    $image = $_FILES['image']['tmp_name'];
-
-    // 画像ファイルをBLOBとして読み込み
-    $imageData = file_get_contents($image);
-
-    // プリペアドステートメントの準備
-    $stmt = $conn->prepare("INSERT INTO recipes (name, ingredients, instructions, image) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $name, $ingredients, $instructions, $imageData);
-
-    // データベースへの挿入
-    if ($stmt->execute()) {
-        $last_id = $stmt->insert_id; // 最後に挿入されたレコードのIDを取得
-        header("Location: add_recipe.php?id=$last_id"); // 新しいレシピの詳細を表示するためにリダイレクト
-        exit();
-    } else {
-        echo "エラー: " . $stmt->error;
+<header>
+        <h1>クッキングパパパット</h1>
+        <nav>
+            <ul>
+                <li><a href="#">ホーム</a></li>
+                <li><a href="#">レシピ一覧</a></li>
+                <li><a href="#">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+<div class="container">
+    <h1>レシピ追加成功しました</h1>
+    <?php
+    $conn = new mysqli('localhost', 'root', '', 'recipe_db');
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
 
-    $stmt->close();
-}
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $name = $_POST['name'];
+        $ingredients = $_POST['ingredients'];
+        $instructions = $_POST['instructions'];
+        $image = NULL;
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-
-    // レシピデータの取得
-    $stmt = $conn->prepare("SELECT name, ingredients, instructions, image FROM recipes WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        echo "<div class='recipe'>";
-        echo "<h2>" . htmlspecialchars($row["name"]) . "</h2>";
-        if (!empty($row["image"])) {
-            echo '<img src="data:image/jpeg;base64,' . base64_encode($row["image"]) . '" alt="料理の写真">';
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+            $image = file_get_contents($_FILES['image']['tmp_name']);
         }
-        echo "<p><strong>食材:</strong><br>" . nl2br(htmlspecialchars($row["ingredients"])) . "</p>";
-        echo "<p><strong>調理方法:</strong><br>" . nl2br(htmlspecialchars($row["instructions"])) . "</p>";
-        echo "</div>";
+
+        $stmt = $conn->prepare("INSERT INTO recipes (name, ingredients, instructions, image) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $name, $ingredients, $instructions, $image);
+        $stmt->send_long_data(3, $image);
+        $stmt->execute();
+
+        // 追加したレシピのIDを取得
+        $last_id = $stmt->insert_id;
+
+        $stmt->close();
+
+        // 追加したレシピの詳細を表示
+        $sql = "SELECT name, ingredients, instructions, image FROM recipes WHERE id = $last_id";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            echo '<div class="recipe">';
+            echo '<h3>' . htmlspecialchars($row['name']) . '</h3>';
+            if ($row['image']) {
+                echo '<img src="data:image/jpeg;base64,' . base64_encode($row['image']) . '" alt="Recipe Image">';
+            }
+            echo '<p><strong>食材:</strong><br>' . nl2br(htmlspecialchars($row['ingredients'])) . '</p>';
+            echo '<p><strong>調理方法:</strong><br>' . nl2br(htmlspecialchars($row['instructions'])) . '</p>';
+            echo '</div>';
+        } else {
+            echo '<p>レシピが見つかりませんでした。</p>';
+        }
     } else {
-        echo "レシピが見つかりません。";
+        echo '<p>レシピの追加に失敗しました。</p>';
     }
 
-    $stmt->close();
-}
-
-$conn->close();
-?>
-<a href="index.php" class="btn btn-primary">戻る</a>
+    $conn->close();
+    ?>
+    <a href="index.php" class="btn btn-primary">戻る</a>
+</div>
 </body>
 </html>
