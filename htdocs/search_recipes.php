@@ -26,11 +26,31 @@
     </form>
 
     <?php
-    if (isset($_GET['query'])) {
-        $conn = new mysqli('127.0.0.1', 'testuser', 'pass', 'yabukic');
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
+# HTMLでのエスケープ処理をする関数（データベースとは無関係だが，ついでにここで定義しておく．）
+function h($var) {
+    if (is_array($var)) {
+      return array_map('h', $var);
+    } else {
+      return htmlspecialchars($var, ENT_QUOTES, 'UTF-8');
+    }
+  }
+  
+  $dbServer = isset($_ENV['MYSQL_SERVER'])    ? $_ENV['MYSQL_SERVER']      : '127.0.0.1';
+  $dbUser = isset($_SERVER['MYSQL_USER'])     ? $_SERVER['MYSQL_USER']     : 'testuser';
+  $dbPass = isset($_SERVER['MYSQL_PASSWORD']) ? $_SERVER['MYSQL_PASSWORD'] : 'pass';
+  $dbName = isset($_SERVER['MYSQL_DB'])       ? $_SERVER['MYSQL_DB']       : 'yabukic';
+  
+  $dsn = "mysql:host={$dbServer};dbname={$dbName};charset=utf8";
+  
+  try {
+    $db = new PDO($dsn, $dbUser, $dbPass);
+    # プリペアドステートメントのエミュレーションを無効にする．
+    $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    # エラー→例外
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  } catch (PDOException $e) {
+    echo "Can't connect to the database: " . h($e->getMessage());
+  }
 
         // 検索クエリを取得
         $query = $_GET['query'];
