@@ -27,7 +27,7 @@
 
     <?php
     if (isset($_GET['query'])) {
-        $conn = new mysqli('127.0.0.1', 'testuser', 'pass', 'recipe_db');
+        $conn = new mysqli('127.0.0.1', 'testuser', 'pass', 'yabukic');
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
