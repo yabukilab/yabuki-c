@@ -47,28 +47,10 @@
             // 検索クエリを取得
             $query = $_GET['query'];
 
-            // カタカナをひらがなに変換する関数
-            function katakanaToHiragana($string) {
-                return mb_convert_kana($string, 'c', 'UTF-8');
-            }
-
-            // ひらがなをカタカナに変換する関数
-            function hiraganaToKatakana($string) {
-                return mb_convert_kana($string, 'C', 'UTF-8');
-            }
-
-            // カタカナとひらがなを両方含めたクエリを構築
-            $hiraganaQuery = katakanaToHiragana($query);
-            $katakanaQuery = hiraganaToKatakana($query);
-
             // SQLクエリを準備
-            $sql = "SELECT id, name, ingredients, instructions, image FROM recipes WHERE name LIKE :query OR name LIKE :hiraganaQuery OR name LIKE :katakanaQuery";
+            $sql = "SELECT id, name, ingredients, instructions, image FROM recipes WHERE name LIKE :query";
             $stmt = $db->prepare($sql);
-            $stmt->execute([
-                ':query' => "%$query%",
-                ':hiraganaQuery' => "%$hiraganaQuery%",
-                ':katakanaQuery' => "%$katakanaQuery%"
-            ]);
+            $stmt->execute([':query' => "%$query%"]);
 
             // 結果を取得
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
