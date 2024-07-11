@@ -48,15 +48,27 @@
             $query = $_GET['query'];
 
             // カタカナをひらがなに変換
-            $hiraganaQuery = mb_convert_kana($query, 'c');
+            function katakanaToHiragana($string) {
+                return mb_convert_kana($string, 'c', 'UTF-8');
+            }
+
+            // ひらがなをカタカナに変換
+            function hiraganaToKatakana($string) {
+                return mb_convert_kana($string, 'C', 'UTF-8');
+            }
+
+            $hiraganaQuery = katakanaToHiragana($query);
+            $katakanaQuery = hiraganaToKatakana($query);
 
             // SQLクエリを準備
-            $sql = "SELECT id, name, ingredients, instructions, image FROM recipes WHERE name LIKE :query OR name LIKE :hiraganaQuery";
+            $sql = "SELECT id, name, ingredients, instructions, image FROM recipes WHERE name LIKE :query OR name LIKE :hiraganaQuery OR name LIKE :katakanaQuery";
             $stmt = $db->prepare($sql);
             $likeQuery = "%$query%";
             $likeHiraganaQuery = "%$hiraganaQuery%";
+            $likeKatakanaQuery = "%$katakanaQuery%";
             $stmt->bindParam(':query', $likeQuery);
             $stmt->bindParam(':hiraganaQuery', $likeHiraganaQuery);
+            $stmt->bindParam(':katakanaQuery', $likeKatakanaQuery);
             $stmt->execute();
 
             // 結果を取得
