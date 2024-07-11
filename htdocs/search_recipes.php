@@ -89,7 +89,7 @@ function h($var) {
         }
 
         $conn->close();
-    }
+    
     ?>
     <br>
     <a href="webpage.html" class="btn btn-primary">戻る</a>
