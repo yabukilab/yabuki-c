@@ -64,7 +64,7 @@ h2 {
 
 .recipe-card img {
     width: 100%;
-    height: auto;
+    height: 50%;
     border-radius: 8px;
     margin: 20px 0;
 }
