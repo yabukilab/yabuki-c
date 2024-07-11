@@ -47,10 +47,17 @@
             // 検索クエリを取得
             $query = $_GET['query'];
 
+            // カタカナをひらがなに変換
+            $hiraganaQuery = mb_convert_kana($query, 'c');
+
             // SQLクエリを準備
-            $sql = "SELECT id, name, ingredients, instructions, image FROM recipes WHERE name LIKE :query";
+            $sql = "SELECT id, name, ingredients, instructions, image FROM recipes WHERE name LIKE :query OR name LIKE :hiraganaQuery";
             $stmt = $db->prepare($sql);
-            $stmt->execute([':query' => "%$query%"]);
+            $likeQuery = "%$query%";
+            $likeHiraganaQuery = "%$hiraganaQuery%";
+            $stmt->bindParam(':query', $likeQuery);
+            $stmt->bindParam(':hiraganaQuery', $likeHiraganaQuery);
+            $stmt->execute();
 
             // 結果を取得
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
