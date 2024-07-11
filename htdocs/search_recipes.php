@@ -26,70 +26,73 @@
     </form>
 
     <?php
-# HTMLでのエスケープ処理をする関数（データベースとは無関係だが，ついでにここで定義しておく．）
-function h($var) {
-    if (is_array($var)) {
-      return array_map('h', $var);
-    } else {
-      return htmlspecialchars($var, ENT_QUOTES, 'UTF-8');
-    }
-  }
-  
-  $dbServer = isset($_ENV['MYSQL_SERVER'])    ? $_ENV['MYSQL_SERVER']      : '127.0.0.1';
-  $dbUser = isset($_SERVER['MYSQL_USER'])     ? $_SERVER['MYSQL_USER']     : 'testuser';
-  $dbPass = isset($_SERVER['MYSQL_PASSWORD']) ? $_SERVER['MYSQL_PASSWORD'] : 'pass';
-  $dbName = isset($_SERVER['MYSQL_DB'])       ? $_SERVER['MYSQL_DB']       : 'yabukic';
-  
-  $dsn = "mysql:host={$dbServer};dbname={$dbName};charset=utf8";
-  
-  try {
-    $db = new PDO($dsn, $dbUser, $dbPass);
-    # プリペアドステートメントのエミュレーションを無効にする．
-    $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-    # エラー→例外
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  } catch (PDOException $e) {
-    echo "Can't connect to the database: " . h($e->getMessage());
-  }
+    if (isset($_GET['query'])) {
+        // データベース接続情報の設定
+        $dbServer = isset($_ENV['MYSQL_SERVER'])    ? $_ENV['MYSQL_SERVER']      : '127.0.0.1';
+        $dbUser = isset($_SERVER['MYSQL_USER'])     ? $_SERVER['MYSQL_USER']     : 'testuser';
+        $dbPass = isset($_SERVER['MYSQL_PASSWORD']) ? $_SERVER['MYSQL_PASSWORD'] : 'pass';
+        $dbName = isset($_SERVER['MYSQL_DB'])       ? $_SERVER['MYSQL_DB']       : 'yabukic';
 
-        // 検索クエリを取得
-        $query = $_GET['query'];
+        // データベース接続のためのDSN設定
+        $dsn = "mysql:host={$dbServer};dbname={$dbName};charset=utf8";
 
-        // カタカナをひらがなに変換する関数
-        function katakanaToHiragana($string) {
-            return mb_convert_kana($string, 'c', 'UTF-8');
-        }
+        try {
+            // データベースに接続
+            $db = new PDO($dsn, $dbUser, $dbPass);
+            // プリペアドステートメントのエミュレーションを無効にする
+            $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            // エラーモードを例外に設定
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // ひらがなをカタカナに変換する関数
-        function hiraganaToKatakana($string) {
-            return mb_convert_kana($string, 'C', 'UTF-8');
-        }
+            // 検索クエリを取得
+            $query = $_GET['query'];
 
-        // カタカナとひらがなを両方含めたクエリを構築
-        $hiraganaQuery = katakanaToHiragana($query);
-        $katakanaQuery = hiraganaToKatakana($query);
-        $sql = "SELECT id, name, ingredients, instructions, image FROM recipes WHERE name LIKE '%$query%' OR name LIKE '%$hiraganaQuery%' OR name LIKE '%$katakanaQuery%'";
-
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            echo '<h2>検索結果</h2>';
-            while ($row = $result->fetch_assoc()) {
-                echo '<div class="recipe">';
-                echo '<h4>' . htmlspecialchars($row['name']) . '</h4>';
-                if ($row['image']) {
-                    echo '<img src="data:image/jpeg;base64,' . base64_encode($row['image']) . '" alt="Recipe Image">';
-                }
-                echo '<p><strong>食材:</strong><br>' . nl2br(htmlspecialchars($row['ingredients'])) . '</p>';
-                echo '<p><strong>調理方法:</strong><br>' . nl2br(htmlspecialchars($row['instructions'])) . '</p>';
-                echo '</div>';
+            // カタカナをひらがなに変換する関数
+            function katakanaToHiragana($string) {
+                return mb_convert_kana($string, 'c', 'UTF-8');
             }
-        } else {
-            echo '<p>レシピが見つかりませんでした。</p>';
-        }
 
-        $conn->close();
-    
+            // ひらがなをカタカナに変換する関数
+            function hiraganaToKatakana($string) {
+                return mb_convert_kana($string, 'C', 'UTF-8');
+            }
+
+            // カタカナとひらがなを両方含めたクエリを構築
+            $hiraganaQuery = katakanaToHiragana($query);
+            $katakanaQuery = hiraganaToKatakana($query);
+
+            // SQLクエリを準備
+            $sql = "SELECT id, name, ingredients, instructions, image FROM recipes WHERE name LIKE :query OR name LIKE :hiraganaQuery OR name LIKE :katakanaQuery";
+            $stmt = $db->prepare($sql);
+            $stmt->execute([
+                ':query' => "%$query%",
+                ':hiraganaQuery' => "%$hiraganaQuery%",
+                ':katakanaQuery' => "%$katakanaQuery%"
+            ]);
+
+            // 結果を取得
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (count($result) > 0) {
+                echo '<h2>検索結果</h2>';
+                foreach ($result as $row) {
+                    echo '<div class="recipe">';
+                    echo '<h4>' . htmlspecialchars($row['name']) . '</h4>';
+                    if ($row['image']) {
+                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row['image']) . '" alt="Recipe Image">';
+                    }
+                    echo '<p><strong>食材:</strong><br>' . nl2br(htmlspecialchars($row['ingredients'])) . '</p>';
+                    echo '<p><strong>調理方法:</strong><br>' . nl2br(htmlspecialchars($row['instructions'])) . '</p>';
+                    echo '</div>';
+                }
+            } else {
+                echo '<p>レシピが見つかりませんでした。</p>';
+            }
+        } catch (PDOException $e) {
+            // 接続エラーの場合、エラーメッセージを表示
+            echo "データベースに接続できません: " . htmlspecialchars($e->getMessage());
+        }
+    }
     ?>
     <br>
     <a href="webpage.html" class="btn btn-primary">戻る</a>
