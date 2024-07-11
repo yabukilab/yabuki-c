@@ -9,9 +9,8 @@
         <h1>クッキングパパパット</h1>
         <nav>
             <ul>
-                <li><a href="#">ホーム</a></li>
-                <li><a href="#">レシピ一覧</a></li>
-                <li><a href="#">お問い合わせ</a></li>
+                <li><a href="webpage.html">ホーム</a></li>
+                <li><a href="view_recipes.php">レシピ一覧</a></li>
             </ul>
         </nav>
     </header>
