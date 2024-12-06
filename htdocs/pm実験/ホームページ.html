@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/CSS" href="./PM.CSS">
+    <title>津田沼の名店</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudlare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9WoXpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="PM.CSS"/>
+</head>
+<body>
+    <div class="header">
+        <div class="left"><a href="#i1">ホーム</a></div>
+        <div class="center"><a href="#i2">お勧めのお店</a></div>
+        <div class="right"><a href="#i3">質問</a></div>
+    </div>
+    <h1 class="center" id="i1">津田沼の名店</h1>
+    <div class="center">
+        <img src="津田沼駅.jpg" alt="津田沼駅の写真">
+    </div>
+    <h2 class="center" id="i2">お勧めのお店</h2>
+    <div class="image-container">
+        <div class="left">
+            <div class="image-container"><a href="韓国屋台村.html">韓国屋台村</a></div>
+            <img src="korea.jpg" alt="韓国屋台村">
+        </div>
+        <div class="center">
+            <div class="image-container"><a href="あけぼの.html">あけぼの</a></div>
+            <img src="akebono.jpg" alt="あげばの">
+        </div>
+        <div class="right">
+            <div class="image-container"><a href="和田.html">和田</a></div>
+            <img src="wada.jpg" alt="和田">
+        </div>
+    </div>
+    <table>
+        <tr>
+            <th>韓国屋台村</th>
+            <th>あけぼの</th>
+            <th>和田</th>
+        </tr>
+        <tr>
+            <td>韓国料理</td>
+            <td>洋食</td>
+            <td>ラーメン屋</td>
+        </tr>
+    </table>
+     <h1 id="i3">質問</h1>
+     <div class="faq-container">
+        <div class="faq">
+            <h3>Q1:韓国屋台村の営業時間は？</h3>
+
+            <p>11~21時まで21時ラストオーダー</p>
+       </div>
+        <div class="faq">
+            <h3>Q2:こちらの店は予約は必要ですか？</h3>
+
+            <p>予約は必要ではありませんが、した方が良い。</p>
+        </div>
+        <div class="faq">
+            <h3>Q3:ランチメニューは別であるのか？</h3>
+
+            <p>ランチメニューも用意されています。</p>
+        </div>
+        <div class="faq">
+            <h3>Q4:ウエイティングはありますか？</h3>
+
+            <p>特にないみたいです。</p>
+        </div>
+     </div>
+     <script>
+        document.querySelectorAll('.faq h3').forEach(faq => {
+            faq.addEventListener('click', () => {
+                faq.parentElement.classList.toggle('active');
+            });
+        });
+     </script>
+</body>
+</html>
