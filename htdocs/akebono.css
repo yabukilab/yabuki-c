@@ -43,7 +43,7 @@
   
   .carousel .image:nth-of-type(1) {
     animation: change-img-anim-first 30s infinite;
-    animation-delay: 10s;
+    animation-delay: 0s;
   }
   
   .carousel .image:nth-of-type(2) {
@@ -230,13 +230,14 @@
     padding: 35px 0;
     border-radius: 50%;
     background: #fcfff4;
-    background: -webkit-gradient(
+    background: -webkit-gradient
+    (
       linear,
       left top,
       left bottom,
-      from(#fcfff4),
-      color-stop(40%, #dfe5d7),
-      to(#b3bead)
+    from(#fcfff4),
+    color-stop(40%, #dfe5d7),
+    to(#b3bead)
     );
     background: -webkit-linear-gradient(
       top,
