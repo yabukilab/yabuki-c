@@ -1,3 +1,4 @@
+@import "https://use.fontawesome.com/releases/v5.13.0/css/all.css";
 .he {
     background-color: rgb(239, 238, 223);
   }
@@ -182,9 +183,6 @@
     color: #212529;
     border-radius: 0.5rem;
   }
-  
-  @import "https://use.fontawesome.com/releases/v5.13.0/css/all.css";
-  
   *,
   *:before,
   *:after {
@@ -240,11 +238,11 @@
     to(#b3bead)
     );
     background: -webkit-linear-gradient(
-      top,
-      #fcfff4 0%,
-      #dfe5d7 40%,
-      #b3bead 100%
-    );
+        top,
+        #fcfff4 0%,
+        #dfe5d7 40%,
+        #b3bead 100%
+      );      
     background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
     -webkit-box-shadow: inset 5px 30px 20px rgba(255, 255, 255, 0.5),
       0 6px 10px rgba(0, 0, 0, 0.2);
