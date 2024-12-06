@@ -43,7 +43,7 @@
   
   .carousel .image:nth-of-type(1) {
     animation: change-img-anim-first 30s infinite;
-    animation-delay: 10s;
+    animation-delay: 0s;
   }
   
   .carousel .image:nth-of-type(2) {
@@ -304,3 +304,5 @@
   .btn-right {
     margin-right: 0; /* 右寄せ用（調整不要） */
   }
+
+  
