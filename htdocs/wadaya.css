@@ -91,4 +91,6 @@ p {
 .imge{
     width: 500px;
     height:350px;
+    margin: auto;
+    display: block;
   }
