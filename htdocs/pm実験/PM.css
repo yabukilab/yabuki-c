@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Muli', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(239,238,223);
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 10px;
+}
+.header a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
+.header a:hover {
+    background-color: #575757;
+}
+.center {
+    text-align: center;
+    margin: 20px 0;
+}
+.left {
+    text-align: left;
+    margin: 20px;
+}
+.right {
+    text-align: right;
+    margin: 20px;
+}
+.img {
+    width: 100%;
+    height: 100px;
+}
+.image-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+.image-container img {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+}
+.image-caption {
+    text-align: center;
+    margin-top: 10px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+table, th, td {
+    border: 1px solid #ddd;
+}
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+th {
+    background-color: #333;
+    color: white;
+}
+.faq-container {
+    margin: 30px auto;
+    max-width: 800px;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.faq {
+    margin-bottom: 15px;
+}
+.faq h3 {
+    font-size: 1.1rem;
+    margin: 0;
+    cursor: pointer;
+    padding: 10px;
+    background: #eee;
+    border-radius: 3px;
+}
+.faq p {
+    margin: 0;
+    padding: 10px;
+    display: none;
+    color: #555;
+}
+.faq.active p {
+    display: block;
+}
