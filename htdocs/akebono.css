@@ -6,7 +6,8 @@
 
   p {
     color: rgb(184, 28, 34);
-  }
+    font-size: 20px;
+    }
 
   h2 {
     background-color: rgb(0, 0, 0);
