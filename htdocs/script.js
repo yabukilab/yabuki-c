@@ -11,12 +11,12 @@ let turnCount = 0;
 let gameEnded = false;
 let currentUser = localStorage.getItem('currentUser') || "guest";
 
-function saveScore(score) {
+function saveScore(score, reason) {
   if (!currentUser) return;
   const key = `scores_${currentUser}`;
   const scores = JSON.parse(localStorage.getItem(key)) || [];
-  scores.push(score);
-  scores.sort((a, b) => b - a);
+  scores.push({ score, reason });
+  scores.sort((a, b) => b.score - a.score);
   localStorage.setItem(key, JSON.stringify(scores.slice(0, 10)));
 }
 
@@ -36,7 +36,7 @@ function startTimer() {
       document.getElementById('restartBtn').style.display = 'inline-block';
       document.getElementById('menuBtn').style.display = 'inline-block';
       document.getElementById('scoreBtn').style.display = 'inline-block';
-      saveScore(turnCount);
+      saveScore(turnCount, "timeout");
       const log = document.getElementById('log');
       const endMessage = document.createElement('div');
       endMessage.textContent = `⏰ 制限時間終了！合計ターン数: ${turnCount}`;
@@ -105,12 +105,21 @@ document.getElementById('submitBtn').addEventListener('click', () => {
       const aiEntry = document.createElement('div');
       if (available.length === 0) {
         aiEntry.textContent = '🤖 コンピューター: （該当なし）';
+        log.appendChild(aiEntry);
+        gameEnded = true;
+        document.getElementById('playerInput').disabled = true;
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('restartBtn').style.display = 'inline-block';
+        document.getElementById('menuBtn').style.display = 'inline-block';
+        document.getElementById('scoreBtn').style.display = 'inline-block';
+        saveScore(turnCount, "cpuout");
+        return;
       } else {
         const aiWord = available[0];
         aiEntry.textContent = `🤖 コンピューター: ${aiWord}`;
         turnCount++;
         updateDisplays();
+        log.appendChild(aiEntry);
       }
-      log.appendChild(aiEntry);
     });
 });

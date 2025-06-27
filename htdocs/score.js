@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const currentUser = localStorage.getItem('currentUser') || 'guest';
-  document.getElementById('usernameLabel').textContent = `ユーザー: ${currentUser}`;
-  const list = document.getElementById('scoreList');
-  const scores = JSON.parse(localStorage.getItem(`scores_${currentUser}`)) || [];
+  const currentUser = localStorage.getItem('currentUser');
+  const list = document.getElementById("scoreList");
+  list.innerHTML = "";
 
-  scores.forEach((score, index) => {
-    const item = document.createElement('li');
-    item.textContent = `${index + 1}位: ターン数 ${score}`;
+  const scores = JSON.parse(localStorage.getItem(`scores_${currentUser}`)) || [];
+  scores.forEach((entry, i) => {
+    const item = document.createElement("li");
+    item.textContent = `${i + 1}位: ターン数 ${entry.score}`;
+    if (entry.reason === "cpuout") {
+      item.classList.add("cpuout");
+      item.textContent += "（CPU切れ）";
+    }
     list.appendChild(item);
   });
 });
