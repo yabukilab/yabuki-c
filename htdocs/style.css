@@ -36,3 +36,8 @@ body {
   padding: 1rem;
   background: #fafafa;
 }
+
+.cpuout {
+  color: gray;
+  font-style: italic;
+}
