@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>新規登録 - しりとりバトル</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 40px; background: #f9f9f9; }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+    }
+    .error { color: red; }
+    .success { color: green; }
+  </style>
+</head>
+<body>
+  <h1>新規ユーザー登録</h1>
+  <input type="text" id="newId" placeholder="ユーザーID"><br>
+  <input type="password" id="newPassword" placeholder="パスワード"><br>
+  <input type="password" id="confirmPassword" placeholder="パスワード（確認）"><br>
+  <button onclick="register()">登録する</button><br>
+  <p><a href="login.html">ログイン画面へ戻る</a></p>
+  <p class="error" id="errorMsg"></p>
+  <p class="success" id="successMsg"></p>
+
+  <script src="register.js"></script>
+</body>
+</html>
