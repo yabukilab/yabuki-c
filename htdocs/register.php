@@ -4,7 +4,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 // あなたのMySQL接続情報に合わせて変更！
 $host = 'localhost';
-$db   = 'shiritori';
+$db   = 'siritori';
 $user = 'testuser';
 $pass = 'pass';  // ← 実際のパスワードに置き換えてください
 

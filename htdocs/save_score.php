@@ -6,7 +6,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 // DB情報（あなたの環境に合わせて変更）
 $host = 'localhost';
-$db   = 'shiritori';
+$db   = 'siritori';
 $user = 'testuser';
 $pass = 'pass'; // ←実際のパスワードに置き換えてください
 
