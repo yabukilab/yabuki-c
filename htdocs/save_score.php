@@ -6,7 +6,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 // DB情報（あなたの環境に合わせて変更）
 $host = 'localhost';
-$db   = 'siritori';
+$db   = 'shiritori';
 $user = 'testuser';
 $pass = 'pass'; // ←実際のパスワードに置き換えてください
 
@@ -28,7 +28,8 @@ try {
   ]);
 
   echo json_encode(["success" => true]);
-} catch (PDOException $e) {
-  echo json_encode(["success" => false, "error" => "データベースエラー"]);
+catch (PDOException $e) {
+  echo json_encode(["success" => false, "error" => "データベースエラー：" . $e->getMessage()]);
 }
+
 ?>
