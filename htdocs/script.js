@@ -89,7 +89,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   log.appendChild(entry);
   input.value = "";
 
-  fetch('./data/words_custom.json')
+  fetch('./data/words_large_corrected.json')
     .then(response => response.json())
     .then(dictionary => {
       const rawLastChar = word[word.length - 1];
