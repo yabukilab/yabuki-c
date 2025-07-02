@@ -19,7 +19,35 @@
     <button id="menuBtn" style="display: none;" onclick="location.href='menu.html'">メニュー</button>
     <button id="scoreBtn" style="display: none;" onclick="location.href='score.html'">成績</button>
   </div>
-
   <script src="script.js"></script>
+
+  <script>
+  // ゲームが終わったときに呼び出す関数
+  function saveScore(userId, score, time) {
+    const scoreData = {
+      user_id: userId,
+      score: score,
+      play_time: time
+    };
+
+    fetch("save_score.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(scoreData)
+    })
+    .then(res => res.json())
+    .then(result => {
+      if (result.success) {
+        alert("スコア保存完了！");
+      } else {
+        alert("保存失敗：" + result.error);
+      }
+    });
+  }
+
+  // 例：ゲームが終了したときにこの関数を呼び出す
+  // saveScore(1, 150, 38.2); ← user_id, スコア, プレイ時間
+</script>
+
 </body>
 </html>
