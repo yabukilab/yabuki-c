@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>スコアランキング</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; background: #f4f4f4; padding: 20px; }
+    table { margin: 0 auto; border-collapse: collapse; width: 60%; }
+    th, td { border: 1px solid #ccc; padding: 10px; }
+    th { background-color: #eee; }
+  </style>
+</head>
+<body>
+  <h1>しりとりRTA スコアランキング</h1>
+  <table>
+    <thead>
+      <tr><th>順位</th><th>ユーザー名</th><th>スコア</th><th>プレイ日時</th></tr>
+    </thead>
+    <tbody id="rankingBody"></tbody>
+  </table>
+
+  <script src="ranking.js"></script>
+</body>
+</html>
