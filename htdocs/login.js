@@ -1,25 +1,25 @@
-function login() {
+async function login() {
   const id = document.getElementById('userId').value.trim();
   const pw = document.getElementById('password').value;
+  const errorMsg = document.getElementById('errorMsg');
 
   if (!id || !pw) {
-    document.getElementById('errorMsg').textContent = 'IDとパスワードを入力してください。';
+    errorMsg.textContent = 'IDとパスワードを入力してください。';
     return;
   }
 
-  const users = JSON.parse(localStorage.getItem('users')) || {};
+  const res = await fetch("login.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: id, password: pw })
+  });
 
-  if (!users[id]) {
-    document.getElementById('errorMsg').textContent = 'このユーザーIDは登録されていません。';
-    return;
+  const result = await res.json();
+
+  if (result.success) {
+    // ログイン成功 → メニューへ遷移
+    location.href = "menu.html";
+  } else {
+    errorMsg.textContent = result.error;
   }
-
-  if (users[id] !== pw) {
-    document.getElementById('errorMsg').textContent = 'パスワードが一致しません。';
-    return;
-  }
-
-  // ログイン成功：ユーザーIDを記憶してメニューへ
-  localStorage.setItem('currentUser', id);
-  location.href = 'menu.html';
 }
