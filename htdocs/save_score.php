@@ -6,7 +6,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 // DB情報（あなたの環境に合わせて変更）
 $host = '127.0.0.1';
-$db   = 'shiritori';
+$db = 'testuser_db'; 
 $user = 'testuser';
 $pass = 'pass'; // ← 実際のMySQLパスワードに置き換える
 
