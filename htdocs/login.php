@@ -10,8 +10,8 @@ $password = $data['password'] ?? '';
 // DB接続設定
 $host = 'localhost';
 $db   = 'testuser_db';  // ← あなたのDB名に変更済み
-$user = 'testuser';
-$pass = 'pass';
+$user = 'root';
+$pass = '';
 
 try {
   $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
