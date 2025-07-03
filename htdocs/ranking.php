@@ -2,7 +2,7 @@
 header("Content-Type: application/json; charset=UTF-8");
 
 $host = 'localhost';
-$db   = 'siritori';
+$db   = 'shiritori';
 $user = 'testuser';
 $pass = 'pass'; // ←あなたのMySQLパスワードに変更
 
