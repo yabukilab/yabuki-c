@@ -5,12 +5,19 @@ function katakanaToHiragana(str) {
   );
 }
 
+// 小文字を大文字に変換（「ゃ」→「や」など）
+function normalizeLastChar(char) {
+  const map = { 'ぁ': 'あ', 'ぃ': 'い', 'ぅ': 'う', 'ぇ': 'え', 'ぉ': 'お', 'ゃ': 'や', 'ゅ': 'ゆ', 'ょ': 'よ' };
+  return map[char] || char;
+}
+
 let remainingTime = 60;
 let gameInterval = null;
 let turnCount = 0;
 let gameEnded = false;
 let currentUser = localStorage.getItem('currentUser') || "guest";
 let previousWord = null;
+let requiredInitial = null; // ランダム開始用
 
 function saveScore(score) {
   if (!currentUser) return;
@@ -55,6 +62,7 @@ function resetGame() {
   turnCount = 0;
   gameEnded = false;
   previousWord = null;
+  requiredInitial = getRandomHiragana();
   document.getElementById('log').innerHTML = "";
   document.getElementById('playerInput').disabled = false;
   document.getElementById('submitBtn').disabled = false;
@@ -63,6 +71,11 @@ function resetGame() {
   document.getElementById('menuBtn').style.display = 'none';
   document.getElementById('scoreBtn').style.display = 'none';
   updateDisplays();
+
+  const startMessage = document.createElement('div');
+  startMessage.textContent = `🎲 ゲーム開始：『${requiredInitial}』から始まる単語を入力してください！`;
+  document.getElementById('log').appendChild(startMessage);
+
   startTimer();
 }
 
@@ -71,8 +84,29 @@ function getUsedWords() {
   return Array.from(log.children).map(div => div.textContent.split(': ')[1]);
 }
 
+function getValidLastChar(word) {
+  if (!word) return null;
+  const w = katakanaToHiragana(word);
+  const last = w.slice(-1);
+  const beforeLast = w.length > 1 ? w.slice(-2, -1) : '';
+  if (last === 'ー') {
+    return normalizeLastChar(beforeLast);
+  }
+  return normalizeLastChar(last);
+}
+
+function getValidFirstChar(word) {
+  const w = katakanaToHiragana(word);
+  return normalizeLastChar(w[0]);
+}
+
+function getRandomHiragana() {
+  const base = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわ';
+  return base[Math.floor(Math.random() * base.length)];
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  startTimer();
+  resetGame();
 
   document.getElementById('restartBtn').addEventListener('click', resetGame);
   document.getElementById('scoreBtn').addEventListener('click', () => {
@@ -93,37 +127,40 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   fetch('./data/words_large_corrected.json')
     .then(response => response.json())
     .then(dictionary => {
-      const wordHiragana = katakanaToHiragana(word);
-
+      const wordHira = katakanaToHiragana(word);
       const allWords = Object.values(dictionary).flat();
-      if (!allWords.includes(wordHiragana)) {
+
+      if (!allWords.includes(wordHira)) {
         alert("❌ この単語は辞書に登録されていません。");
         return;
       }
 
       const usedWords = getUsedWords();
-      if (usedWords.includes(wordHiragana)) {
+      if (usedWords.includes(wordHira)) {
         alert("❌ この単語はすでに使われています。");
         return;
       }
 
+      const firstChar = getValidFirstChar(word);
       if (previousWord) {
-        const prevLast = katakanaToHiragana(previousWord.slice(-1));
-        const currFirst = wordHiragana[0];
-        if (prevLast !== currFirst) {
-          alert(`❌ 前の単語は「${previousWord}」です。頭文字「${prevLast}」で始まる単語を入力してください。`);
+        const expected = getValidLastChar(previousWord);
+        if (firstChar !== expected) {
+          alert(`❌ 前の単語は「${previousWord}」です。「${expected}」で始まる単語を入力してください。`);
           return;
         }
+      } else if (firstChar !== requiredInitial) {
+        alert(`❌ 最初の単語は「${requiredInitial}」で始まる必要があります。`);
+        return;
       }
 
       const log = document.getElementById('log');
       const entry = document.createElement('div');
-      entry.textContent = `🧑 プレイヤー: ${wordHiragana}`;
+      entry.textContent = `🧑 プレイヤー: ${wordHira}`;
       log.appendChild(entry);
       input.value = "";
-      previousWord = wordHiragana;
+      previousWord = wordHira;
 
-      const lastChar = wordHiragana.slice(-1);
+      const lastChar = getValidLastChar(word);
       const candidates = dictionary[lastChar] || [];
       const available = candidates.filter(w => !usedWords.includes(w));
 
