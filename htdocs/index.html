@@ -47,6 +47,21 @@
 
   // 例：ゲームが終了したときにこの関数を呼び出す
   // saveScore(1, 150, 38.2); ← user_id, スコア, プレイ時間
+  function endGame() {
+  clearInterval(timerId);
+  document.getElementById("restartBtn").style.display = "inline-block";
+  document.getElementById("menuBtn").style.display = "inline-block";
+  document.getElementById("scoreBtn").style.display = "inline-block";
+  logMessage("ゲーム終了！");
+
+  // ここでスコアを保存！
+  const score = turnCount;        // ← ターン数をスコアとする例
+  const timeTaken = 60 - timeLeft; // ← 経過時間を保存（任意）
+  const userId = 1;               // ← 実際のログイン中ユーザーのIDを代入
+
+  saveScore(userId, score, timeTaken);
+}
+
 </script>
 
 </body>

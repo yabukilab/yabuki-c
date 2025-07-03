@@ -8,7 +8,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 $host = 'localhost';
 $db   = 'shiritori';
 $user = 'testuser';
-$pass = 'pass'; // ←実際のパスワードに置き換えてください
+$pass = 'pass'; // ← 実際のMySQLパスワードに置き換える
 
 try {
   $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
@@ -24,16 +24,11 @@ try {
   $stmt->execute([
     $data['user_id'],
     $data['score'],
-    $data['play_time'] ?? null  // play_time は任意
+    $data['play_time'] ?? null
   ]);
 
   echo json_encode(["success" => true]);
-catch (PDOException $e) {
+} catch (PDOException $e) {
   echo json_encode(["success" => false, "error" => "データベースエラー：" . $e->getMessage()]);
 }
-
-catch (PDOException $e) {
-  echo json_encode(["success" => false, "error" => $e->getMessage()]);
-}
-
 ?>
