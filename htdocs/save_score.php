@@ -5,7 +5,7 @@ header("Content-Type: application/json; charset=UTF-8");
 $data = json_decode(file_get_contents("php://input"), true);
 
 // DB情報（あなたの環境に合わせて変更）
-$host = 'localhost';
+$host = '127.0.0.1';
 $db   = 'shiritori';
 $user = 'testuser';
 $pass = 'pass'; // ← 実際のMySQLパスワードに置き換える
