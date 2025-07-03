@@ -10,7 +10,9 @@
       const userId = document.getElementById("userId").value;
       const password = document.getElementById("password").value;
       const error = document.getElementById("errorMessage");
+      const success = document.getElementById("successMessage");
       error.textContent = "";
+      success.textContent = "";
 
       const allowedChars = /^[a-zA-Z0-9!$%&'()*+,/;<=>?\[\]^{}~]{1,20}$/;
       if (!allowedChars.test(userId)) {
@@ -35,13 +37,21 @@
         return false;
       }
 
-      // 通過した場合は true
-      return true;
+      success.textContent = "\u767b\u9332\u3067\u304d\u307e\u3057\u305f\uff01"; // 登録できました！
+      return false; // 実際の登録処理は未実装のため送信は防ぐ
     }
   </script>
 </head>
 <body>
   <h1>新規登録</h1>
+
+  <p>
+    <strong>※入力ルール：</strong><br>
+    ユーザーID：半角英数字および記号 <code>! $ % & ' ( ) * + , / ; &lt; = &gt; ? [ ] ^ {{ }} ~</code><br>
+    （最大20文字）<br>
+    パスワード：8～20文字、大文字・小文字・数字・記号のうち<strong>最低2種類</strong>を含める必要があります。
+  </p>
+
   <form onsubmit="return validateForm()">
     <label for="userId">ユーザーID:</label>
     <input type="text" id="userId" name="userId" maxlength="20" required><br><br>
@@ -51,6 +61,10 @@
 
     <button type="submit">登録</button>
   </form>
+
   <p id="errorMessage" style="color: red;"></p>
+  <p id="successMessage" style="color: green;"></p>
+
+  <button onclick="location.href='login.html'">ログイン画面に戻る</button>
 </body>
 </html>
