@@ -3,8 +3,8 @@ header("Content-Type: application/json; charset=UTF-8");
 
 $host = 'localhost';
 $db   = 'shiritori';
-$user = 'root';
-$pass = ''; // ←あなたのMySQLパスワードに変更
+$user = 'testuser';
+$pass = 'pass'; // ←あなたのMySQLパスワードに変更
 
 try {
   $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
