@@ -11,13 +11,19 @@ function normalizeLastChar(char) {
   return map[char] || char;
 }
 
+// ログを自動スクロール
+function scrollLogToBottom() {
+  const log = document.getElementById('log');
+  log.scrollTop = log.scrollHeight;
+}
+
 let remainingTime = 60;
 let gameInterval = null;
 let turnCount = 0;
 let gameEnded = false;
 let currentUser = localStorage.getItem('currentUser') || "guest";
 let previousWord = null;
-let requiredInitial = null; // ランダム開始用
+let requiredInitial = null;
 
 function saveScore(score) {
   if (!currentUser) return;
@@ -49,6 +55,7 @@ function startTimer() {
       const endMessage = document.createElement('div');
       endMessage.textContent = `⏰ 制限時間終了！合計ターン数: ${turnCount}`;
       log.appendChild(endMessage);
+      scrollLogToBottom();
       return;
     }
     remainingTime--;
@@ -75,6 +82,7 @@ function resetGame() {
   const startMessage = document.createElement('div');
   startMessage.textContent = `🎲 ゲーム開始：『${requiredInitial}』から始まる単語を入力してください！`;
   document.getElementById('log').appendChild(startMessage);
+  scrollLogToBottom();
 
   startTimer();
 }
@@ -114,6 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('menuBtn').addEventListener('click', () => {
     location.href = 'menu.html';
+  });
+
+  // Enter キーで送信
+  document.getElementById('playerInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      document.getElementById('submitBtn').click();
+    }
   });
 });
 
@@ -157,6 +172,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
       const entry = document.createElement('div');
       entry.textContent = `🧑 プレイヤー: ${wordHira}`;
       log.appendChild(entry);
+      scrollLogToBottom();
       input.value = "";
       previousWord = wordHira;
 
@@ -175,5 +191,6 @@ document.getElementById('submitBtn').addEventListener('click', () => {
         updateDisplays();
       }
       log.appendChild(aiEntry);
+      scrollLogToBottom();
     });
 });
