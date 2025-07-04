@@ -2,69 +2,18 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>新規登録</title>
-  <link rel="stylesheet" href="style.css">
-  <script>
-    function validateForm() {
-      const userId = document.getElementById("userId").value;
-      const password = document.getElementById("password").value;
-      const error = document.getElementById("errorMessage");
-      const success = document.getElementById("successMessage");
-      error.textContent = "";
-      success.textContent = "";
-
-      const allowedChars = /^[a-zA-Z0-9!$%&'()*+,/;<=>?\[\]^{}~]{1,20}$/;
-      if (!allowedChars.test(userId)) {
-        error.textContent = "ユーザーIDは半角英数字と指定された記号のみ、20文字以内で入力してください。";
-        return false;
-      }
-
-      if (password.length < 8 || password.length > 20) {
-        error.textContent = "パスワードは8文字以上20文字以内で入力してください。";
-        return false;
-      }
-
-      const hasUpper = /[A-Z]/.test(password);
-      const hasLower = /[a-z]/.test(password);
-      const hasDigit = /[0-9]/.test(password);
-      const hasSymbol = /[!$%&'()*+,/;<=>?\[\]^{}~]/.test(password);
-
-      const typesUsed = [hasUpper, hasLower, hasDigit, hasSymbol].filter(Boolean).length;
-
-      if (typesUsed < 2) {
-        error.textContent = "パスワードは大文字、小文字、数字、記号のうち2種類以上を含めてください。";
-        return false;
-      }
-
-      success.textContent = "\u767b\u9332\u3067\u304d\u307e\u3057\u305f\uff01"; // 登録できました！
-      return false; // 実際の登録処理は未実装のため送信は防ぐ
-    }
-  </script>
+  <style>/* 省略 */</style>
 </head>
 <body>
-  <h1>新規登録</h1>
+  <h1>新規ユーザー登録</h1>
+  <input type="text" id="newId" placeholder="ユーザーID"><br>
+  <input type="password" id="newPassword" placeholder="パスワード"><br>
+  <input type="password" id="confirmPassword" placeholder="パスワード（確認）"><br>
+  <button onclick="register()">登録する</button><br>
+  <p class="error" id="errorMsg"></p>
+  <p class="success" id="successMsg"></p>
 
-  <p>
-    <strong>※入力ルール：</strong><br>
-    ユーザーID：半角英数字および記号 <code>! $ % & ' ( ) * + , / ; &lt; = &gt; ? [ ] ^ {{ }} ~</code><br>
-    （最大20文字）<br>
-    パスワード：8～20文字、大文字・小文字・数字・記号のうち<strong>最低2種類</strong>を含める必要があります。
-  </p>
-
-  <form onsubmit="return validateForm()">
-    <label for="userId">ユーザーID:</label>
-    <input type="text" id="userId" name="userId" maxlength="20" required><br><br>
-
-    <label for="password">パスワード:</label>
-    <input type="password" id="password" name="password" required><br><br>
-
-    <button type="submit">登録</button>
-  </form>
-
-  <p id="errorMessage" style="color: red;"></p>
-  <p id="successMessage" style="color: green;"></p>
-
-  <button onclick="location.href='login.html'">ログイン画面に戻る</button>
+  <script src="register.js"></script>
 </body>
 </html>

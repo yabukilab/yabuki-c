@@ -4,12 +4,13 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 // あなたのMySQL接続情報に合わせて変更！
 $host = 'localhost';
-$db   = 'siritori';
+$port = '3306';
+$db   = 'mydb';
 $user = 'testuser';
-$pass = 'pass';  // ← 実際のパスワードに置き換えてください
+$pass = 'pass';// ← 実際のパスワードに置き換えてください
 
 try {
-  $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
+  $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db;charset=utf8", $user, $pass);
   $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
   $hashed = password_hash($data['password'], PASSWORD_DEFAULT);
   $stmt->execute([$data['username'], $hashed]);

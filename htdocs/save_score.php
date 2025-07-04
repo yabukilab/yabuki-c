@@ -6,9 +6,10 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 // DB情報（あなたの環境に合わせて変更）
 $host = 'localhost';
-$db = 'testuser_db'; 
+$port = '3306';
+$db   = 'mydb';
 $user = 'testuser';
-$pass = 'pass'; // ← 実際のMySQLパスワードに置き換える
+$pass = 'pass';// ← 実際のMySQLパスワードに置き換える
 
 try {
   $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);

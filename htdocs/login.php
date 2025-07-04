@@ -2,19 +2,20 @@
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
 
-// JSON受け取り
+// 受け取ったJSONを解析
 $data = json_decode(file_get_contents("php://input"), true);
 $username = $data['username'] ?? '';
 $password = $data['password'] ?? '';
 
-// DB接続設定
+// DB接続情報
 $host = 'localhost';
-$db   = 'testuser_db';  // ← あなたのDB名に変更済み
+$port = '3306';
+$db   = 'mydb';
 $user = 'testuser';
 $pass = 'pass';
 
 try {
-  $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
+  $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db;charset=utf8", $user, $pass);
 
   // ユーザー名で検索
   $stmt = $pdo->prepare("SELECT id, password FROM users WHERE username = ?");
@@ -22,7 +23,6 @@ try {
   $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
   if ($user && password_verify($password, $user['password'])) {
-    // ログイン成功：セッションに保存
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['username'] = $username;
     echo json_encode(["success" => true]);
@@ -30,6 +30,5 @@ try {
     echo json_encode(["success" => false, "error" => "IDまたはパスワードが正しくありません"]);
   }
 } catch (PDOException $e) {
-  echo json_encode(["success" => false, "error" => "データベース接続エラー"]);
+  echo json_encode(["success" => false, "error" => "接続エラー: " . $e->getMessage()]);
 }
-?>
