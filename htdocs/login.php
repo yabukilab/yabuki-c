@@ -7,7 +7,7 @@ $userid = "";
 $dbServer = '127.0.0.1'; // Docker使用なら 'db' に
 $dbUser   = $_SERVER['MYSQL_USER']     ?? 'testuser';
 $dbPass   = $_SERVER['MYSQL_PASSWORD'] ?? 'pass';
-$dbName   = $_SERVER['MYSQL_DB']       ?? 'mydb';
+$dbName = 'yabukic';
 $dsn = "mysql:host=$dbServer;dbname=$dbName;charset=utf8";
 
 try {
