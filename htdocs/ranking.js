@@ -3,8 +3,8 @@ window.onload = async function () {
   const data = await res.json();
   const tbody = document.getElementById("rankingBody");
 
-  if (data.length === 0) {
-    tbody.innerHTML = "<tr><td colspan='4'>ランキングがまだありません</td></tr>";
+  if (!Array.isArray(data) || data.length === 0) {
+    tbody.innerHTML = "<tr><td colspan='4'>ランキングはまだありません。</td></tr>";
     return;
   }
 

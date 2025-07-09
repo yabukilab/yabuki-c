@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       <?php endif; ?>
       <button type="submit">ログイン</button>
     </form>
-    <p><a href="register.html">新規登録はこちら</a></p>
+    <p><a href="register.php">新規登録はこちら</a></p>
   </div>
   <footer>© 2025 yabuki lab</footer>
 </body>

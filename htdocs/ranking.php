@@ -1,22 +1,17 @@
 <?php
 header("Content-Type: application/json; charset=UTF-8");
-
-$host = 'localhost';
-$db   = 'shiritori';
-$user = 'testuser';
-$pass = 'pass'; // ←あなたのMySQLパスワードに変更
+require 'db.php'; // $db を含む
 
 try {
-  $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
-  $sql = "SELECT users.username, game_records.score, game_records.play_date 
-          FROM game_records 
-          JOIN users ON game_records.user_id = users.id 
-          ORDER BY game_records.score DESC 
-          LIMIT 10";
-  $stmt = $pdo->query($sql);
-  $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-  echo json_encode($result);
+    $stmt = $db->query("
+        SELECT username, best_score, best_score_time, best_score_playtime
+        FROM users
+        WHERE best_score IS NOT NULL
+        ORDER BY best_score DESC
+        LIMIT 10
+    ");
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($result);
 } catch (PDOException $e) {
-  echo json_encode([]);
+    echo json_encode(["success" => false, "error" => $e->getMessage()]);
 }
-?>
