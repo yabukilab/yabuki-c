@@ -25,3 +25,8 @@ try {
 } catch (PDOException $e) {
   echo "Can't connect to the database: " . h($e->getMessage());
 }
+
+if (password_verify("admin123",'$2y$10$OKU8CGvFF0v3hjCEcdR7VuVeK8xvH/N2XzxlQ6VnZ4pYvT8goNmie')){
+  echo "hell";
+}
+echo password_hash('admin123', PASSWORD_DEFAULT);
