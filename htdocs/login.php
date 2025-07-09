@@ -3,19 +3,9 @@ session_start();
 $error = "";
 $userid = "";
 
-// DB接続設定
-$dbServer = '127.0.0.1'; // Docker使用なら 'db' に
-$dbUser   = $_SERVER['MYSQL_USER']     ?? 'testuser';
-$dbPass   = $_SERVER['MYSQL_PASSWORD'] ?? 'pass';
-$dbName = 'yabukic';
-$dsn = "mysql:host=$dbServer;dbname=$dbName;charset=utf8";
+require "db.php" ;
+$pdo=$db;
 
-try {
-    $pdo = new PDO($dsn, $dbUser, $dbPass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("データベース接続失敗: " . htmlspecialchars($e->getMessage()));
-}
 
 // POSTで送信されたとき
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

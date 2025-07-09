@@ -3,21 +3,8 @@ session_start();
 $message = "";
 $userid = "";
 
-// ✅ DB接続情報を明示的に定義（環境変数を使わない）
-$dbServer = '127.0.0.1';      // または 'localhost'
-$dbUser   = 'testuser';       // ← ここを正しいユーザー名に
-$dbPass   = 'pass';           // ← ここを正しいパスワードに
-$dbName   = 'mydb';           // ← 作成済みのデータベース名
-
-$dsn = "mysql:host=$dbServer;dbname=$dbName;charset=utf8";
-
-try {
-    $pdo = new PDO($dsn, $dbUser, $dbPass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("データベース接続失敗: " . htmlspecialchars($e->getMessage()));
-}
-
+require "db.php" ;
+$pdo=$db;
 
 // フォーム処理
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

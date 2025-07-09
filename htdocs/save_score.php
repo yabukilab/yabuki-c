@@ -4,15 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 // JSONデータを取得
 $data = json_decode(file_get_contents("php://input"), true);
 
-// DB情報（あなたの環境に合わせて変更）
-$host = 'localhost';
-$port = '3306';
-$db   = 'mydb';
-$user = 'testuser';
-$pass = 'pass';// ← 実際のMySQLパスワードに置き換える
-
-try {
-  $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
+require "db.php" ;
 
   // 必須チェック
   if (!isset($data['user_id']) || !isset($data['score'])) {
