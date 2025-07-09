@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <title>ログイン - しりとりバトル</title>
+  <script src="login.js"></script>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 40px; background: #f0f0f0; }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f0f0f0;
+    }
     input, button {
       margin: 10px;
       padding: 10px;
@@ -18,10 +24,7 @@
   <h1>ログイン</h1>
   <input type="text" id="userId" placeholder="ユーザーID"><br>
   <input type="password" id="password" placeholder="パスワード"><br>
-  <button onclick="login()">ログイン</button><br>
-  <p><a href="register.html">新規登録はこちら</a></p>
+  <button onclick="login()">ログイン</button>
   <p class="error" id="errorMsg"></p>
-
-  <script src="login.js"></script>
 </body>
 </html>

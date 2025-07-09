@@ -17,8 +17,8 @@ async function login() {
   const result = await res.json();
 
   if (result.success) {
-    location.href = "menu.html";
+    window.location.href = "menu.html"; // ✅ ここでリダイレクト
   } else {
-    errorMsg.textContent = result.error;
+    errorMsg.textContent = result.error || "ログインに失敗しました";
   }
 }

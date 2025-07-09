@@ -1,22 +1,47 @@
 <?php
-header("Content-Type: application/json; charset=UTF-8");
-$data = json_decode(file_get_contents("php://input"), true);
+// register.php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $username = trim($_POST['username'] ?? '');
+  $password = $_POST['password'] ?? '';
 
-// あなたのMySQL接続情報に合わせて変更！
-$host = 'localhost';
-$port = '3306';
-$db   = 'mydb';
-$user = 'testuser';
-$pass = 'pass';// ← 実際のパスワードに置き換えてください
+  if (!$username || !$password) {
+    $message = "ユーザー名とパスワードを入力してください。";
+  } else {
+    $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-try {
-  $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db;charset=utf8", $user, $pass);
-  $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-  $hashed = password_hash($data['password'], PASSWORD_DEFAULT);
-  $stmt->execute([$data['username'], $hashed]);
-  echo json_encode(["success" => true]);
-} catch (PDOException $e) {
-  echo json_encode(["success" => false, "error" => "登録に失敗しました"]);
+    $host = '127.0.0.1';
+    $db   = 'mydb';
+    $user = 'testuser';
+    $pass = 'pass';
+    $dsn  = "mysql:host=$host;dbname=$db;charset=utf8";
+
+    try {
+      $pdo = new PDO($dsn, $user, $pass);
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+      $stmt = $pdo->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
+      $stmt->execute([$username, $hashed]);
+      $message = "登録が完了しました。ログインしてください。";
+    } catch (PDOException $e) {
+      $message = "エラー: " . htmlspecialchars($e->getMessage());
+    }
+  }
 }
 ?>
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>新規登録</title>
+</head>
+<body>
+  <h1>ユーザー登録</h1>
+  <?php if (!empty($message)) echo '<p>' . htmlspecialchars($message) . '</p>'; ?>
+  <form method="post" action="register.php">
+    <label>ユーザー名: <input type="text" name="username" required></label><br><br>
+    <label>パスワード: <input type="password" name="password" required></label><br><br>
+    <button type="submit">登録</button>
+  </form>
+  <p><a href="login.php">ログインへ戻る</a></p>
+</body>
+</html>
