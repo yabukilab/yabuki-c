@@ -66,5 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
   <input type="password" id="password" placeholder="パスワード"><br>
   <button onclick="login()">ログイン</button>
   <p class="error" id="errorMsg"></p>
+  <p><a href="register.php">新規登録</a></p>
 </body>
 </html>
