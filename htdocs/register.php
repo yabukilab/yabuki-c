@@ -67,3 +67,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <footer>© 2025 yabuki lab</footer>
 </body>
 </html>
+
+

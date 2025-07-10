@@ -40,48 +40,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ログイン</title>
-  <link rel="stylesheet" href="newuserstyle.css" />
+  <title>ログイン - しりとりバトル</title>
+  <script src="login.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f0f0f0;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+    }
+    .error { color: red; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h2>ログイン</h2>
-    <form onsubmit="login(); return false;">
-      <input type="text" id="userId" placeholder="ID" required />
-      <input type="password" id="password" placeholder="パスワード" required />
-      <div id="errorMsg" class="error"><?= htmlspecialchars($error) ?></div>
-      <button type="submit">ログイン</button>
-    </form>
-    <p><a href="register.php">新規登録はこちら</a></p>
-  </div>
-  <footer>© 2025 yabuki lab</footer>
-
-  <script>
-  async function login() {
-    const id = document.getElementById('userId').value.trim();
-    const pw = document.getElementById('password').value;
-    const errorMsg = document.getElementById('errorMsg');
-
-    if (!id || !pw) {
-      errorMsg.textContent = 'IDとパスワードを入力してください。';
-      return;
-    }
-
-    const res = await fetch("index.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: id, password: pw })
-    });
-
-    const result = await res.json();
-
-    if (result.success) {
-      window.location.href = "menu.html";
-    } else {
-      errorMsg.textContent = result.error || "ログインに失敗しました";
-    }
-  }
-  </script>
+  <h1>ログイン</h1>
+  <input type="text" id="userId" placeholder="ユーザーID"><br>
+  <input type="password" id="password" placeholder="パスワード"><br>
+  <button onclick="login()">ログイン</button>
+  <p class="error" id="errorMsg"></p>
 </body>
 </html>
