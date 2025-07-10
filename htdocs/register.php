@@ -27,7 +27,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt = $pdo->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
             $stmt->execute([$userid, $hashed]);
             header("Location: login.php?register=success");
-            exit();
+            
+// ユーザー登録処理（既存の INSERT 実行の後）:
+$hashed = password_hash($password, PASSWORD_DEFAULT);
+$stmt = $pdo->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
+$stmt->execute([$userid, $hashed]);
+
+// ✅ INSERT文をmydb.sqlファイルに追記
+$sqlLine = sprintf(
+    "INSERT INTO users (username, password, is_admin) VALUES ('%s', '%s', 0);\n",
+    addslashes($userid),
+    addslashes($hashed)
+);
+file_put_contents("mydb.sql", $sqlLine, FILE_APPEND);
+
+// ✅ ログインページへリダイレクト
+header("Location: index.php?register=success");
+exit();
+
         }
     }
 }
