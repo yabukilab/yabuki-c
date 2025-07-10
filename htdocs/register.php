@@ -23,9 +23,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($stmt->fetch()) {
             $message = "※このユーザーIDは既に使われています";
         } else {
-            $hashed = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
-            $stmt->execute([$userid, $hashed]);
+ 
+<<<<<<< HEAD
+            header("Location: index.php?register=success");
+            
+// ユーザー登録処理（既存の INSERT 実行の後）:
+$hashed = password_hash($password, PASSWORD_DEFAULT);
+$stmt = $pdo->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
+$stmt->execute([$userid, $hashed]);
+
+// ✅ INSERT文をmydb.sqlファイルに追記
+$sqlLine = sprintf(
+    "INSERT INTO users (username, password, is_admin) VALUES ('%s', '%s', 0);\n",
+    addslashes($userid),
+    addslashes($hashed)
+);
+file_put_contents("mydb.sql", $sqlLine, FILE_APPEND);
+
+// ✅ ログインページへリダイレクト
+header("Location: index.php?register=success");
+exit();
+
+=======
             header("Location: login.php?register=success");
             
 // ユーザー登録処理（既存の INSERT 実行の後）:
@@ -45,6 +64,7 @@ file_put_contents("mydb.sql", $sqlLine, FILE_APPEND);
 header("Location: index.php?register=success");
 exit();
 
+>>>>>>> 7ceffb3a92aa54a7393c199893e6288c322adf68
         }
     }
 }
