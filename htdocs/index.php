@@ -31,6 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
         echo json_encode(["success" => false, "error" => "IDまたはパスワードが正しくありません"]);
     }
     exit();
+    echo "<script>localStorage.setItem('user_id', {$user['id']});</script>";
+
 }
 
 // ✅ HTML画面表示（GETアクセスの場合）
