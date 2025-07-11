@@ -25,7 +25,29 @@ $username = $_SESSION["username"];
     <h1>しりとりバトル メニュー</h1>
     <p>ようこそ、<strong><?= htmlspecialchars($username) ?></strong> さん！</p>
 
-    <ul>
-      <li><a href="game.html">▶ ゲームを開始</a></li>
-      <li><a href="score.html">📊 成績を見る</a></li>
-      <li><a href="
+  <!-- バラバラに配置された絵文字たち -->
+  <div class="emoji" style="top: 10%; left: 15%;">🍎</div>
+  <div class="emoji" style="top: 20%; left: 70%;">🦍</div>
+  <div class="emoji" style="top: 35%; left: 40%;">📯</div>
+  <div class="emoji" style="top: 55%; left: 80%;">🐱</div>
+  <div class="emoji" style="top: 65%; left: 25%;">📦</div>
+  <div class="emoji" style="top: 75%; left: 50%;">🍙</div>
+  <div class="emoji" style="top: 5%;  left: 80%;">🐰</div>
+  <div class="emoji" style="top: 50%; left: 10%;">🦊</div>
+  <div class="emoji" style="top: 85%; left: 60%;">🪿</div>
+  <div class="emoji" style="top: 30%; left: 90%;">🧃</div>
+  <div class="emoji" style="top: 40%; left: 5%;">🍓</div>
+  <div class="emoji" style="top: 15%; left: 55%;">🐘</div>
+  <div class="emoji" style="top: 70%; left: 35%;">🎈</div>
+  <div class="emoji" style="top: 90%; left: 20%;">🧸</div>
+
+  <!-- メニュー本体 -->
+  <div class="container">
+    <h1>しりとりバトル 🎮 メニュー</h1>
+    <button class="menu-button" onclick="location.href='game.html'">▶ ゲーム開始</button>
+
+    <!--- データベースに接続ができなかったため機能凍結
+    <button class="menu-button" onclick="location.href='score.html'">▶ 成績を見る</button>
+    <button class="menu-button" onclick="location.href='ranking.html'">▶ ランキング</button> -->
+  </div>
+  </body>
