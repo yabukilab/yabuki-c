@@ -1,49 +1,48 @@
 <?php
 session_start();
-header("Content-Type: application/json");
+header("Content-Type: application/json; charset=UTF-8");
 
-require_once "db.php";
+require "db.php"; // PDO接続用の $db を含む
 $pdo = $db;
 
-// JSONで送信されたデータを取得
+// JSONデータ受信
 $data = json_decode(file_get_contents("php://input"), true);
 
-// セッション or データから user_id を取得
-$user_id = $_SESSION["user_id"] ?? $data["user_id"] ?? null;
-$score = $data["score"] ?? null;
-$play_time = $data["play_time"] ?? null;
-
-// バリデーション
-if (!$user_id || $score === null || $play_time === null) {
-    echo json_encode([
-        "success" => false,
-        "error" => "ユーザーIDまたはスコアが不足しています"
-    ]);
-    exit();
+// 必要なデータの存在確認
+if (
+  !isset($data["user_id"]) ||
+  !isset($data["score"]) ||
+  !isset($data["play_time"])
+) {
+  echo json_encode(["success" => false, "error" => "ユーザーIDまたはスコアが不足しています"]);
+  exit();
 }
 
+$user_id   = (int)$data["user_id"];
+$score     = (int)$data["score"];
+$play_time = (float)$data["play_time"];
+$now       = date("Y-m-d H:i:s");
+
 try {
-    // 現在のベストスコアを取得
-    $stmt = $pdo->prepare("SELECT best_score FROM users WHERE id = ?");
-    $stmt->execute([$user_id]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  // 該当ユーザーが存在するか確認
+  $stmt = $pdo->prepare("SELECT best_score FROM users WHERE id = ?");
+  $stmt->execute([$user_id]);
+  $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$row) {
-        throw new Exception("ユーザーが見つかりません");
-    }
+  if (!$user) {
+    echo json_encode(["success" => false, "error" => "ユーザーが存在しません"]);
+    exit();
+  }
 
-    $best = $row['best_score'];
+  // スコア保存（game_records テーブルにも残したい場合はここで INSERT）
 
-    // スコアがベストより高ければ更新
-    if ($best === null || $score > $best) {
-        $stmt = $pdo->prepare("UPDATE users SET best_score = ?, best_time = ?, best_date = NOW() WHERE id = ?");
-        $stmt->execute([$score, $play_time, $user_id]);
-    }
+  // ベストスコア更新が必要かチェック
+  if ($user["best_score"] === null || $score > $user["best_score"]) {
+    $update = $pdo->prepare("UPDATE users SET best_score = ?, best_time = ?, best_datetime = ? WHERE id = ?");
+    $update->execute([$score, $play_time, $now, $user_id]);
+  }
 
-    echo json_encode(["success" => true]);
-} catch (Exception $e) {
-    echo json_encode([
-        "success" => false,
-        "error" => "保存中にエラーが発生しました: " . $e->getMessage()
-    ]);
+  echo json_encode(["success" => true]);
+} catch (PDOException $e) {
+  echo json_encode(["success" => false, "error" => "DBエラー: " . $e->getMessage()]);
 }
