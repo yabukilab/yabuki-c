@@ -44,6 +44,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
   <meta charset="UTF-8" />
   <title>ログイン - しりとりバトル</title>
   <script src="login.js"></script>
+  <script>
+  // ログイン成功時に user_id を保存
+  localStorage.setItem("user_id", <?= json_encode($_SESSION["user_id"]) ?>);
+</script>
+
   <style>
     body {
       font-family: sans-serif;

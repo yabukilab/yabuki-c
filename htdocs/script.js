@@ -194,9 +194,12 @@ document.getElementById('submitBtn').addEventListener('click', () => {
       scrollLogToBottom();
     });
 
-    const userId = parseInt(localStorage.getItem("user_id"), 10);
-if (userId) {
+   const userId = parseInt(localStorage.getItem("user_id"), 10);
+
+if (userId && turnCount > 0) {
   saveScoreToServer(userId, turnCount, 60 - remainingTime);
+} else {
+  alert("保存失敗：ユーザーIDまたはスコアが不足しています");
 }
 
 });
