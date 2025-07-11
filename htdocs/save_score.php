@@ -5,7 +5,7 @@ header("Content-Type: application/json; charset=UTF-8");
 require "db.php";
 $pdo = $db;
 
-// JSONを受け取る
+// JSONデータを取得
 $data = json_decode(file_get_contents("php://input"), true);
 
 // バリデーション
@@ -14,7 +14,10 @@ if (
     !isset($data["score"]) ||
     !isset($data["play_time"])
 ) {
-    echo json_encode(["success" => false, "error" => "ユーザーIDまたはスコアが不足しています"]);
+    echo json_encode([
+        "success" => false,
+        "error"   => "ユーザーIDまたはスコアが不足しています"
+    ]);
     exit();
 }
 
@@ -24,29 +27,40 @@ $play_time = (float)$data["play_time"];
 $now       = date("Y-m-d H:i:s");
 
 try {
-    // ユーザーのベストスコアを取得
+    // 現在のベストスコア取得
     $stmt = $pdo->prepare("SELECT best_score FROM users WHERE id = ?");
     $stmt->execute([$user_id]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
-        echo json_encode(["success" => false, "error" => "ユーザーが存在しません"]);
+        echo json_encode([
+            "success" => false,
+            "error"   => "ユーザーが存在しません"
+        ]);
         exit();
     }
 
-    // ベストスコア更新判定
+    // ベストスコア更新が必要なら
     if ($user["best_score"] === null || $score > (int)$user["best_score"]) {
         $upd = $pdo->prepare("
             UPDATE users
-            SET best_score = ?,
-                best_score_duration = ?,
-                best_score_time = ?
-            WHERE id = ?
+            SET best_score     = :score,
+                best_time      = :play_time,
+                best_datetime  = :now
+            WHERE id = :uid
         ");
-        $upd->execute([$score, $play_time, $now, $user_id]);
+        $upd->execute([
+            ':score'     => $score,
+            ':play_time' => $play_time,
+            ':now'       => $now,
+            ':uid'       => $user_id
+        ]);
     }
 
     echo json_encode(["success" => true]);
 } catch (PDOException $e) {
-    echo json_encode(["success" => false, "error" => "DBエラー: " . $e->getMessage()]);
+    echo json_encode([
+        "success" => false,
+        "error"   => "DBエラー: " . $e->getMessage()
+    ]);
 }
