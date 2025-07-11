@@ -101,9 +101,6 @@ $username = $_SESSION["username"];
   <div class="emoji" style="top: 70%; left: 35%;">🎈</div>
   <div class="emoji" style="top: 90%; left: 20%;">🧸</div>
 
-  <!-- メニュー本体 -->
-  <div class="container">
-    <h1>しりとりバトル 🎮 メニュー</h1>
     <button class="menu-button" onclick="location.href='game.html'">▶ ゲーム開始</button>
 
     <!--- データベースに接続ができなかったため機能凍結
