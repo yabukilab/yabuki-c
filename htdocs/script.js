@@ -1,3 +1,33 @@
+function saveScoreToServer(userId, score, time) {
+  fetch("save_score.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id: userId,
+      score: score,
+      play_time: time
+    })
+  })
+  .then(res => res.json())
+  .then(result => {
+    if (result.success) {
+      alert("✅ スコア保存完了！");
+    } else {
+      alert("❌ 保存失敗：" + result.error);
+    }
+  })
+  .catch(err => {
+    alert("通信エラー：" + err);
+  });
+}
+
+// OK:
+saveScoreToServer(userId, score, playTime);
+
+// NG（未定義ならエラー）:
+saveScore(userId, score, playTime);
+
+
 // カタカナ→ひらがな変換関数
 function katakanaToHiragana(str) {
   return str.replace(/[ァ-ヶー]/g, ch =>
