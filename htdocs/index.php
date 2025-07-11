@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
     const result = await res.json();
 
     if (result.success) {
-      window.location.href = "menu.html";
+      window.location.href = "menu.php";
     } else {
       errorMsg.textContent = result.error || "ログインに失敗しました";
     }
