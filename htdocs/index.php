@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>ログイン - しりとりバトル</title>
+  <title>ログイン - しりとりバトル爆</title>
   <script src="login.js"></script>
   <script>
   // ログイン成功時に user_id を保存
