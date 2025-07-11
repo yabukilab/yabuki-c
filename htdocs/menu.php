@@ -26,6 +26,6 @@ $username = $_SESSION["username"];
     <p>ようこそ、<strong><?= htmlspecialchars($username) ?></strong> さん！</p>
 
     <ul>
-      <li><a href="index.html">▶ ゲームを開始</a></li>
+      <li><a href="game.html">▶ ゲームを開始</a></li>
       <li><a href="score.html">📊 成績を見る</a></li>
       <li><a href="
