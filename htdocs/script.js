@@ -1,33 +1,3 @@
-function saveScoreToServer(userId, score, time) {
-  fetch("save_score.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      user_id: userId,
-      score: score,
-      play_time: time
-    })
-  })
-  .then(res => res.json())
-  .then(result => {
-    if (result.success) {
-      alert("✅ スコア保存完了！");
-    } else {
-      alert("❌ 保存失敗：" + result.error);
-    }
-  })
-  .catch(err => {
-    alert("通信エラー：" + err);
-  });
-}
-
-// OK:
-saveScoreToServer(userId, score, playTime);
-
-// NG（未定義ならエラー）:
-saveScore(userId, score, playTime);
-
-
 // カタカナ→ひらがな変換関数
 function katakanaToHiragana(str) {
   return str.replace(/[ァ-ヶー]/g, ch =>
@@ -35,9 +5,12 @@ function katakanaToHiragana(str) {
   );
 }
 
-// 小文字を大文字に変換（「ゃ」→「や」など）
+// 小文字を大文字に変換
 function normalizeLastChar(char) {
-  const map = { 'ぁ': 'あ', 'ぃ': 'い', 'ぅ': 'う', 'ぇ': 'え', 'ぉ': 'お', 'ゃ': 'や', 'ゅ': 'ゆ', 'ょ': 'よ' };
+  const map = {
+    'ぁ': 'あ', 'ぃ': 'い', 'ぅ': 'う', 'ぇ': 'え', 'ぉ': 'お',
+    'ゃ': 'や', 'ゅ': 'ゆ', 'ょ': 'よ'
+  };
   return map[char] || char;
 }
 
@@ -52,16 +25,37 @@ let gameInterval = null;
 let turnCount = 0;
 let gameEnded = false;
 let currentUser = localStorage.getItem('currentUser') || "guest";
+let userId = parseInt(localStorage.getItem('user_id')) || null;
 let previousWord = null;
 let requiredInitial = null;
 
-function saveScore(score) {
-  if (!currentUser) return;
-  const key = `scores_${currentUser}`;
-  const scores = JSON.parse(localStorage.getItem(key)) || [];
-  scores.push(score);
-  scores.sort((a, b) => b - a);
-  localStorage.setItem(key, JSON.stringify(scores.slice(0, 10)));
+// 🔁 スコア保存関数（バックエンド連携）
+function saveScoreToServer(userId, score, playTime) {
+  if (!userId || score === undefined) {
+    console.error("ユーザーIDまたはスコアが不足しています");
+    return;
+  }
+
+  fetch("save_score.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id: userId,
+      score: score,
+      play_time: playTime
+    })
+  })
+    .then(res => res.json())
+    .then(result => {
+      if (result.success) {
+        alert("✅ スコア保存完了！");
+      } else {
+        alert("❌ 保存失敗：" + (result.error || "不明なエラー"));
+      }
+    })
+    .catch(err => {
+      alert("❌ 通信エラー：" + err);
+    });
 }
 
 function updateDisplays() {
@@ -80,12 +74,17 @@ function startTimer() {
       document.getElementById('restartBtn').style.display = 'inline-block';
       document.getElementById('menuBtn').style.display = 'inline-block';
       document.getElementById('scoreBtn').style.display = 'inline-block';
-      saveScore(turnCount);
+
       const log = document.getElementById('log');
       const endMessage = document.createElement('div');
       endMessage.textContent = `⏰ 制限時間終了！合計ターン数: ${turnCount}`;
       log.appendChild(endMessage);
       scrollLogToBottom();
+
+      if (userId) {
+        saveScoreToServer(userId, turnCount, 60);
+      }
+
       return;
     }
     remainingTime--;
@@ -127,10 +126,7 @@ function getValidLastChar(word) {
   const w = katakanaToHiragana(word);
   const last = w.slice(-1);
   const beforeLast = w.length > 1 ? w.slice(-2, -1) : '';
-  if (last === 'ー') {
-    return normalizeLastChar(beforeLast);
-  }
-  return normalizeLastChar(last);
+  return normalizeLastChar(last === 'ー' ? beforeLast : last);
 }
 
 function getValidFirstChar(word) {
@@ -151,10 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
     location.href = 'score.html';
   });
   document.getElementById('menuBtn').addEventListener('click', () => {
-    location.href = 'menu.html';
+    location.href = 'menu.php';
   });
 
-  // Enter キーで送信
   document.getElementById('playerInput').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       document.getElementById('submitBtn').click();
@@ -167,7 +162,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
 
   const input = document.getElementById('playerInput');
   const word = input.value.trim();
-  if (word === "") return;
+  if (!word) return;
 
   fetch('./data/words_large_corrected.json')
     .then(response => response.json())
@@ -223,13 +218,4 @@ document.getElementById('submitBtn').addEventListener('click', () => {
       log.appendChild(aiEntry);
       scrollLogToBottom();
     });
-
-   const userId = parseInt(localStorage.getItem("user_id"), 10);
-
-if (userId && turnCount > 0) {
-  saveScoreToServer(userId, turnCount, 60 - remainingTime);
-} else {
-  alert("保存失敗：ユーザーIDまたはスコアが不足しています");
-}
-
 });

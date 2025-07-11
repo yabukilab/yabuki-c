@@ -1,3 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])) {
+  header("Location: index.php");
+  exit();
+}
+$userId = $_SESSION["user_id"];
+$username = $_SESSION["username"];
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,6 +15,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>しりとりバトル</title>
   <link rel="stylesheet" href="style.css">
+  <script>
+  localStorage.setItem("user_id", <?= json_encode($userId) ?>);
+  localStorage.setItem("currentUser", <?= json_encode($username) ?>);
+</script>
 </head>
 <body>
   <h1>しりとりバトル</h1>

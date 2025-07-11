@@ -101,7 +101,7 @@ $username = $_SESSION["username"];
   <div class="emoji" style="top: 70%; left: 35%;">🎈</div>
   <div class="emoji" style="top: 90%; left: 20%;">🧸</div>
 
-    <button class="menu-button" onclick="location.href='game.html'">▶ ゲーム開始</button>
+    <button class="menu-button" onclick="location.href='game.php'">▶ ゲーム開始</button>
 
     <!--- データベースに接続ができなかったため機能凍結
     <button class="menu-button" onclick="location.href='score.html'">▶ 成績を見る</button>
