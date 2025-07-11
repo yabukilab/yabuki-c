@@ -193,4 +193,10 @@ document.getElementById('submitBtn').addEventListener('click', () => {
       log.appendChild(aiEntry);
       scrollLogToBottom();
     });
+
+    const userId = parseInt(localStorage.getItem("user_id"), 10);
+if (userId) {
+  saveScoreToServer(userId, turnCount, 60 - remainingTime);
+}
+
 });
