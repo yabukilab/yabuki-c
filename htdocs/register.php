@@ -3,8 +3,8 @@ session_start();
 $message = "";
 $userid = "";
 
-require "db.php" ;
-$pdo=$db;
+require "db.php";
+$pdo = $db;
 
 // フォーム処理
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -23,9 +23,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($stmt->fetch()) {
             $message = "※このユーザーIDは既に使われています";
         } else {
+            // パスワードをハッシュ化してDB登録
             $hashed = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
             $stmt->execute([$userid, $hashed]);
+<<<<<<< HEAD
+=======
+
+            // ✅ mydb.sql に INSERT 文を追記する
+            $escapedUser = addslashes($userid);
+            $escapedHash = addslashes($hashed);
+            $sqlLine = "INSERT INTO users (username, password, is_admin) VALUES ('$escapedUser', '$escapedHash', 0);\n";
+
+            file_put_contents("mydb.sql", $sqlLine, FILE_APPEND | LOCK_EX);
+
+            // リダイレクト
+>>>>>>> f2184d0a5f15070340c4ffd7c22a74b3ad676aba
             header("Location: index.php?register=success");
             exit();
         }
@@ -107,3 +120,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   <footer>© 2025 yabuki lab</footer>
 </html>
+
+

@@ -31,6 +31,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
         echo json_encode(["success" => false, "error" => "IDまたはパスワードが正しくありません"]);
     }
     exit();
+<<<<<<< HEAD
+=======
+    echo "<script>localStorage.setItem('user_id', {$user['id']});</script>";
+
+>>>>>>> f2184d0a5f15070340c4ffd7c22a74b3ad676aba
 }
 
 // ✅ HTML画面表示（GETアクセスの場合）
@@ -40,6 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
+<<<<<<< HEAD
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ログイン</title>
   <link rel="stylesheet" href="newuserstyle.css" />
@@ -83,5 +89,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
     }
   }
   </script>
+=======
+  <title>ログイン - しりとりバトル</title>
+  <script src="login.js"></script>
+  <script>
+  // ログイン成功時に user_id を保存
+  localStorage.setItem("user_id", <?= json_encode($_SESSION["user_id"]) ?>);
+</script>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f0f0f0;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+    }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>ログイン</h1>
+  <input type="text" id="userId" placeholder="ユーザーID"><br>
+  <input type="password" id="password" placeholder="パスワード"><br>
+  <button onclick="login()">ログイン</button>
+  <p class="error" id="errorMsg"></p>
+  <p><a href="register.php">新規登録</a></p>
+>>>>>>> f2184d0a5f15070340c4ffd7c22a74b3ad676aba
 </body>
 </html>
