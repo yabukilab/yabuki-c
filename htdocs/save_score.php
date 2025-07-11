@@ -2,20 +2,20 @@
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
 
-require "db.php"; // PDO接続用の $db を含む
+require "db.php";
 $pdo = $db;
 
-// JSONデータ受信
+// JSONを受け取る
 $data = json_decode(file_get_contents("php://input"), true);
 
-// 必要なデータの存在確認
+// バリデーション
 if (
-  !isset($data["user_id"]) ||
-  !isset($data["score"]) ||
-  !isset($data["play_time"])
+    !isset($data["user_id"]) ||
+    !isset($data["score"]) ||
+    !isset($data["play_time"])
 ) {
-  echo json_encode(["success" => false, "error" => "ユーザーIDまたはスコアが不足しています"]);
-  exit();
+    echo json_encode(["success" => false, "error" => "ユーザーIDまたはスコアが不足しています"]);
+    exit();
 }
 
 $user_id   = (int)$data["user_id"];
@@ -24,25 +24,29 @@ $play_time = (float)$data["play_time"];
 $now       = date("Y-m-d H:i:s");
 
 try {
-  // 該当ユーザーが存在するか確認
-  $stmt = $pdo->prepare("SELECT best_score FROM users WHERE id = ?");
-  $stmt->execute([$user_id]);
-  $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    // ユーザーのベストスコアを取得
+    $stmt = $pdo->prepare("SELECT best_score FROM users WHERE id = ?");
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  if (!$user) {
-    echo json_encode(["success" => false, "error" => "ユーザーが存在しません"]);
-    exit();
-  }
+    if (!$user) {
+        echo json_encode(["success" => false, "error" => "ユーザーが存在しません"]);
+        exit();
+    }
 
-  // スコア保存（game_records テーブルにも残したい場合はここで INSERT）
+    // ベストスコア更新判定
+    if ($user["best_score"] === null || $score > (int)$user["best_score"]) {
+        $upd = $pdo->prepare("
+            UPDATE users
+            SET best_score = ?,
+                best_score_duration = ?,
+                best_score_time = ?
+            WHERE id = ?
+        ");
+        $upd->execute([$score, $play_time, $now, $user_id]);
+    }
 
-  // ベストスコア更新が必要かチェック
-  if ($user["best_score"] === null || $score > $user["best_score"]) {
-    $update = $pdo->prepare("UPDATE users SET best_score = ?, best_time = ?, best_datetime = ? WHERE id = ?");
-    $update->execute([$score, $play_time, $now, $user_id]);
-  }
-
-  echo json_encode(["success" => true]);
+    echo json_encode(["success" => true]);
 } catch (PDOException $e) {
-  echo json_encode(["success" => false, "error" => "DBエラー: " . $e->getMessage()]);
+    echo json_encode(["success" => false, "error" => "DBエラー: " . $e->getMessage()]);
 }
