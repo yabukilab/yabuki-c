@@ -27,8 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $hashed = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
             $stmt->execute([$userid, $hashed]);
-<<<<<<< HEAD
-=======
 
             // ✅ mydb.sql に INSERT 文を追記する
             $escapedUser = addslashes($userid);
@@ -38,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             file_put_contents("mydb.sql", $sqlLine, FILE_APPEND | LOCK_EX);
 
             // リダイレクト
->>>>>>> f2184d0a5f15070340c4ffd7c22a74b3ad676aba
             header("Location: index.php?register=success");
             exit();
         }
