@@ -43,21 +43,55 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ログイン</title>
   <link rel="stylesheet" href="newuserstyle.css" />
+
+    <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f0f0f0;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+    }
+    .error { color: red; }
+    
+   html, body {
+          height: 100%;
+      margin: 0;
+      font-family: 'Kosugi Maru', sans-serif;
+      background: linear-gradient(to bottom right, #ffe0f0, #e0f7fa);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .emoji {
+      position: absolute;
+      font-size: 50px;
+      opacity: 0.12;
+      pointer-events: none;
+      animation: float 10s infinite ease-in-out alternate;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h2>ログイン</h2>
-    <form onsubmit="login(); return false;">
-      <input type="text" id="userId" placeholder="ID" required />
-      <input type="password" id="password" placeholder="パスワード" required />
-      <div id="errorMsg" class="error"><?= htmlspecialchars($error) ?></div>
-      <button type="submit">ログイン</button>
+    <form action="menu.php" method="post">
+      <input type="text" name="userid" placeholder="ID" required value="<?= htmlspecialchars($userid) ?>" />
+      <input type="password" name="password" placeholder="パスワード" required />
+      <?php if (!empty($message)): ?>
+        <div class="error"><?= htmlspecialchars($message) ?></div>
+      <?php endif; ?>
+      <button type="submit">ログインする</button>
+          <p><a href="register.php">新規登録はこちら</a></p>
     </form>
-    <p><a href="register.php">新規登録はこちら</a></p>
   </div>
-  <footer>© 2025 yabuki lab</footer>
 
-  <script>
+    <script>
   async function login() {
     const id = document.getElementById('userId').value.trim();
     const pw = document.getElementById('password').value;
@@ -83,5 +117,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
     }
   }
   </script>
+
+         <!-- バラバラに配置された絵文字たち -->
+  <div class="emoji" style="top: 10%; left: 15%;">🍎</div>
+  <div class="emoji" style="top: 20%; left: 70%;">🦍</div>
+  <div class="emoji" style="top: 35%; left: 40%;">📯</div>
+  <div class="emoji" style="top: 55%; left: 80%;">🐱</div>
+  <div class="emoji" style="top: 65%; left: 25%;">📦</div>
+  <div class="emoji" style="top: 75%; left: 50%;">🍙</div>
+  <div class="emoji" style="top: 5%;  left: 80%;">🐰</div>
+  <div class="emoji" style="top: 50%; left: 10%;">🦊</div>
+  <div class="emoji" style="top: 85%; left: 60%;">🪿</div>
+  <div class="emoji" style="top: 30%; left: 90%;">🧃</div>
+  <div class="emoji" style="top: 40%; left: 5%;">🍓</div>
+  <div class="emoji" style="top: 15%; left: 55%;">🐘</div>
+  <div class="emoji" style="top: 70%; left: 35%;">🎈</div>
+  <div class="emoji" style="top: 90%; left: 20%;">🧸</div>
 </body>
+
+  <footer>© 2025 yabuki lab</footer>
 </html>
