@@ -1,5 +1,10 @@
 <?php
+header("Content-Type: application/json");
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 require_once 'db.php';
+$pdo = $db;
 
 header("Content-Type: application/json");
 $data = json_decode(file_get_contents("php://input"), true);
