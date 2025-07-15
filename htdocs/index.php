@@ -6,7 +6,6 @@ $pdo = $db;
 $userid = "";
 $error = "";
 
-// ✅ JavaScriptからのPOST（JSON）だった場合：APIレスポンス
 if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? "", "application/json") !== false) {
     header("Content-Type: application/json");
     $input = json_decode(file_get_contents("php://input"), true);
@@ -32,8 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
     }
     exit();
 }
-
-// ✅ HTML画面表示（GETアクセスの場合）
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
   <title>ログイン</title>
   <link rel="stylesheet" href="newuserstyle.css" />
 
-    <style>
+  <style>
     body {
       font-family: sans-serif;
       text-align: center;
@@ -58,9 +55,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
       width: 250px;
     }
     .error { color: red; }
-    
-   html, body {
-          height: 100%;
+
+    html, body {
+      height: 100%;
       margin: 0;
       font-family: 'Kosugi Maru', sans-serif;
       background: linear-gradient(to bottom right, #ffe0f0, #e0f7fa);
@@ -80,18 +77,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
 <body>
   <div class="container">
     <h2>ログイン</h2>
-    <form action="menu.php" method="post">
-      <input type="text" name="userid" placeholder="ID" required value="<?= htmlspecialchars($userid) ?>" />
-      <input type="password" name="password" placeholder="パスワード" required />
-      <?php if (!empty($message)): ?>
-        <div class="error"><?= htmlspecialchars($message) ?></div>
-      <?php endif; ?>
-      <button type="submit">ログインする</button>
-          <p><a href="register.php">新規登録はこちら</a></p>
-    </form>
+    <input type="text" id="userId" placeholder="ID" required value="<?= htmlspecialchars($userid) ?>" />
+    <input type="password" id="password" placeholder="パスワード" required />
+    <div id="errorMsg" class="error"><?= htmlspecialchars($error) ?></div>
+    <button onclick="login()">ログインする</button>
+    <p><a href="register.php">新規登録はこちら</a></p>
   </div>
 
-    <script>
+  <script>
   async function login() {
     const id = document.getElementById('userId').value.trim();
     const pw = document.getElementById('password').value;
@@ -118,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
   }
   </script>
 
-         <!-- バラバラに配置された絵文字たち -->
+  <!-- 絵文字背景 -->
   <div class="emoji" style="top: 10%; left: 15%;">🍎</div>
   <div class="emoji" style="top: 20%; left: 70%;">🦍</div>
   <div class="emoji" style="top: 35%; left: 40%;">📯</div>
@@ -135,5 +128,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($_SERVER["CONTENT_TYPE"] ?? 
   <div class="emoji" style="top: 90%; left: 20%;">🧸</div>
 </body>
 
-  <footer>© 2025 yabuki lab</footer>
+<footer>© 2025 yabuki lab</footer>
 </html>
