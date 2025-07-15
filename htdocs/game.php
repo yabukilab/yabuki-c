@@ -16,7 +16,7 @@ $username = $_SESSION["username"];
   <title>しりとりバトル</title>
   <link rel="stylesheet" href="style.css">
   <script>
-    localStorage.setItem("user_id", <?= json_encode($userId) ?>);
+    localStorage.setItem("user_id", <?= json_encode($userid) ?>);
     localStorage.setItem("currentUser", <?= json_encode($username) ?>);
   </script>
 </head>
