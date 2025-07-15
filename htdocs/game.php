@@ -16,9 +16,9 @@ $username = $_SESSION["username"];
   <title>しりとりバトル</title>
   <link rel="stylesheet" href="style.css">
   <script>
-  localStorage.setItem("user_id", <?= json_encode($userId) ?>);
-  localStorage.setItem("currentUser", <?= json_encode($username) ?>);
-</script>
+    localStorage.setItem("user_id", <?= json_encode($userId) ?>);
+    localStorage.setItem("currentUser", <?= json_encode($username) ?>);
+  </script>
 </head>
 <body>
   <h1>しりとりバトル</h1>
@@ -32,12 +32,11 @@ $username = $_SESSION["username"];
     <button id="restartBtn" style="display: none;">リスタート</button>
     <button id="menuBtn" style="display: none;" onclick="location.href='menu.php'">メニュー</button>
     <button id="scoreBtn" style="display: none;" onclick="location.href='score.html'">成績</button>
-
   </div>
+
   <script src="script.js"></script>
 
   <script>
-  // ゲームが終わったときに呼び出す関数
   function saveScore(userId, score, time) {
     const scoreData = {
       user_id: userId,
@@ -60,24 +59,20 @@ $username = $_SESSION["username"];
     });
   }
 
-  // 例：ゲームが終了したときにこの関数を呼び出す
-  // saveScore(1, 150, 38.2); ← user_id, スコア, プレイ時間
   function endGame() {
-  clearInterval(timerId);
-  document.getElementById("restartBtn").style.display = "inline-block";
-  document.getElementById("menuBtn").style.display = "inline-block";
-  document.getElementById("scoreBtn").style.display = "inline-block";
-  logMessage("ゲーム終了！");
+    clearInterval(timerId);
+    document.getElementById("restartBtn").style.display = "inline-block";
+    document.getElementById("menuBtn").style.display = "inline-block";
+    document.getElementById("scoreBtn").style.display = "inline-block";
+    logMessage("ゲーム終了！");
 
-  // ここでスコアを保存！
-  const score = turnCount;        // ← ターン数をスコアとする例
-  const timeTaken = 60 - timeLeft; // ← 経過時間を保存（任意）
-  const userId = 1;               // ← 実際のログイン中ユーザーのIDを代入
+    const score = turnCount;
+    const timeTaken = 60 - timeLeft;
+    const user_Id = localStorage.getItem("user_id");
 
-  saveScore(userId, score, timeTaken);
-}
-
-</script>
+    saveScore(user_Id, score, timeTaken);
+  }
+  </script>
 
 </body>
 </html>
