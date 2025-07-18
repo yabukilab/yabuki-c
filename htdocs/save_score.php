@@ -6,7 +6,6 @@ error_reporting(E_ALL);
 require_once 'db.php';
 $pdo = $db;
 
-header("Content-Type: application/json");
 $data = json_decode(file_get_contents("php://input"), true);
 
 $user_id = (int)$data['user_id'];
@@ -37,10 +36,4 @@ try {
 } catch (PDOException $e) {
     echo json_encode(["success" => false, "error" => $e->getMessage()]);
 }
-// 一時追加
-require_once 'db.php';
-$stmt = $pdo->query("DESCRIBE users");
-$columns = $stmt->fetchAll(PDO::FETCH_COLUMN);
-print_r($columns);
-
 ?>
