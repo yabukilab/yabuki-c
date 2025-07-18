@@ -25,5 +25,3 @@ try {
 } catch (PDOException $e) {
   echo "Can't connect to the database: " . h($e->getMessage());
 }
-// 一時追加
-$pdo = new PDO('mysql:host=db;dbname=your_database_name;charset=utf8', 'user', 'password');
