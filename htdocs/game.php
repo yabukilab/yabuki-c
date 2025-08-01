@@ -32,6 +32,7 @@ $username = $_SESSION["username"];
     <button id="restartBtn" style="display: none;">リスタート</button>
     <button id="menuBtn" style="display: none;" onclick="location.href='menu.php'">メニュー</button>
     <button id="scoreBtn" style="display: none;" onclick="location.href='user_scores.php'">成績</button>
+    <button id="scoreBtn" style="display: none;" onclick="location.href='ranking.php'">ランキング</button>
   </div>
 
   <script src="script.js"></script>
