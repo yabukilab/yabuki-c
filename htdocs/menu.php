@@ -102,9 +102,8 @@ $username = $_SESSION["username"];
   <div class="emoji" style="top: 90%; left: 20%;">🧸</div>
 
     <button class="menu-button" onclick="location.href='game.php'">▶ ゲーム開始</button>
-
-    <!--- データベースに接続ができなかったため機能凍結
-    <button class="menu-button" onclick="location.href='score.html'">▶ 成績を見る</button>
-    <button class="menu-button" onclick="location.href='ranking.html'">▶ ランキング</button> -->
+    <button class="menu-button" onclick="location.href='user_scores.php'">▶ 成績を見る</button>
+    <button class="menu-button" onclick="location.href='ranking.html'">▶ ランキング</button> 
+    
   </div>
   </body>

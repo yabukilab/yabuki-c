@@ -1,2 +1,11 @@
 INSERT INTO users (username, password, is_admin) VALUES ('pass1', '$2y$10$K8GpK0q1QqjmjFnoL0piK.QX3mBhviQuR43F7vW6PlSfmOHItU7XK', 0);
 INSERT INTO users (username, password, is_admin) VALUES ('user1', '$2y$10$n2/vZmNP588b2Nh2Mco6q.rLT6NPJN4BkQzJKiC98Veq6WC2CNyNK', 0);
+INSERT INTO users (username, password, is_admin) VALUES ('user2', '$2y$10$kfFPbyIPWjTuuJK7JfG07O66BzvqXjdbVlrbeYJFVrrNVGlshMu4a', 0);
+INSERT INTO users (username, password, is_admin) VALUES ('user3', '$2y$10$rgL6CknbyYo/0qKEHmSEHeuXDuqpQiP/99e1/K7eVzyMRdsUkrQTu', 0);
+INSERT INTO users (username, password, is_admin) VALUES ('user4', '$2y$10$kMfy9C8cWmCK/FSmusofJ.4.JxVJkdmEy..BY5BobSGYzv7Vo9EpK', 0);
+INSERT INTO users (username, password, is_admin) VALUES ('user5', '$2y$10$UiU/HQ.pY.S/n4mjtdIr0.0uRDlNBAL8G.glAQP/Ej3zlJHeU7xyO', 0);
+INSERT INTO users (username, password, is_admin) VALUES ('user6', '$2y$10$4K3YN256OmKGuoAL/kxsJ.BTwstQdkbk.ZN/AeY/RN9c30r4l3ZpW', 0);
+INSERT INTO users (username, password, is_admin) VALUES ('user7', '$2y$10$u7kPIIGHwxv8IXJOPdTuSeNB0cZaHCkc/HCK515FPdCwQNZ4RSw/a', 0);
+INSERT INTO users (username, password, is_admin) VALUES ('user8', '$2y$10$hsYGthnDTDKg3qSF5NaEDOVRvEqmf9dK3EjcP.ej5tKZ52b/d.K2y', 0);
+INSERT INTO users (username, password, is_admin) VALUES ('user9', '$2y$10$ntAZ2ZXungn7uAnPbhw3mO6Kzyct75kaHWRdwuzNxz.oT1gC7IsYW', 0);
+INSERT INTO users (username, password, is_admin) VALUES ('user100', '$2y$10$PKAArR0UYK3DVtEFhr049uMLUseEgvnCUf2edsKgmA2MRsdz3C4gi', 0);
