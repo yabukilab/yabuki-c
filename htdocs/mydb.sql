@@ -9,3 +9,4 @@ INSERT INTO users (username, password, is_admin) VALUES ('user7', '$2y$10$u7kPII
 INSERT INTO users (username, password, is_admin) VALUES ('user8', '$2y$10$hsYGthnDTDKg3qSF5NaEDOVRvEqmf9dK3EjcP.ej5tKZ52b/d.K2y', 0);
 INSERT INTO users (username, password, is_admin) VALUES ('user9', '$2y$10$ntAZ2ZXungn7uAnPbhw3mO6Kzyct75kaHWRdwuzNxz.oT1gC7IsYW', 0);
 INSERT INTO users (username, password, is_admin) VALUES ('user100', '$2y$10$PKAArR0UYK3DVtEFhr049uMLUseEgvnCUf2edsKgmA2MRsdz3C4gi', 0);
+INSERT INTO users (username, password, is_admin) VALUES ('user1', '$2y$10$JUVEU6xv5GAHbgXIt7.8Q.N6ciSNdAFCyzwS7PHlanUqr1Phcn1La', 0);

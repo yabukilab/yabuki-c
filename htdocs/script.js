@@ -30,33 +30,26 @@ let previousWord = null;
 let requiredInitial = null;
 
 // 🔁 スコア保存関数（バックエンド連携）
-function saveScoreToServer(userId, score, playTime) {
-  if (!userId || score === undefined) {
-    console.error("ユーザーIDまたはスコアが不足しています");
-    return;
-  }
-
-  fetch("save_score.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      user_id: userId,
-      score: score,
-      play_time: playTime
+fetch('save_score.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+        user_id: localStorage.getItem('user_id'),
+        score: score,
+        time: playTime
     })
-  })
-    .then(res => res.json())
-    .then(result => {
-      if (result.success) {
-        alert("✅ スコア保存完了！");
-      } else {
-        alert("❌ 保存失敗：" + (result.error || "不明なエラー"));
-      }
-    })
-    .catch(err => {
-      alert("❌ 通信エラー：" + err);
-    });
-}
+})
+.then(res => res.json())
+.then(data => {
+    if (data.success) {
+        alert(data.message);
+    } else {
+        alert(data.message);
+    }
+})
+.catch(error => {
+    alert('❌ 通信エラー：' + error.message);
+});
 
 function updateDisplays() {
   document.getElementById('timer').textContent = `残り時間: ${remainingTime}秒`;

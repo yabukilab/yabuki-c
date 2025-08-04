@@ -1,39 +1,28 @@
 <?php
-header("Content-Type: application/json");
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+header('Content-Type: application/json');
+require 'db.php';
+session_start();
 
-require_once 'db.php';
-$pdo = $db;
+$user_id = $_POST['user_id'] ?? null;
+$score = $_POST['score'] ?? null;
+$play_time = $_POST['play_time'] ?? null;
 
-$data = json_decode(file_get_contents("php://input"), true);
-
-$user_id = (int)$data['user_id'];
-$score = (int)$data['score'];
-$time = (float)$data['play_time'];
-
-try {
-    // 現在のベストを取得
-    $stmt = $pdo->prepare("SELECT best_score, best_time FROM users WHERE id = ?");
-    $stmt->execute([$user_id]);
-    $current = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    $update = false;
-    if (!$current || is_null($current['best_score'])) {
-        $update = true;
-    } elseif ($score > $current['best_score']) {
-        $update = true;
-    } elseif ($score == $current['best_score'] && $time < $current['best_time']) {
-        $update = true;
+if ($user_id && $score && $play_time) {
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO score (user_id, score, play_time)
+            VALUES (:user_id, :score, :play_time)
+            ON DUPLICATE KEY UPDATE played_at = CURRENT_TIMESTAMP
+        ");
+        $stmt->execute([
+            ':user_id' => $user_id,
+            ':score' => $score,
+            ':play_time' => $play_time,
+        ]);
+        echo json_encode(['status' => 'success', 'message' => '✅ 保存成功']);
+    } catch (PDOException $e) {
+        echo json_encode(['status' => 'error', 'message' => '❌ 保存失敗：DBエラー', 'error' => $e->getMessage()]);
     }
-
-    if ($update) {
-        $stmt = $pdo->prepare("UPDATE users SET best_score = ?, best_time = ?, best_datetime = NOW() WHERE id = ?");
-        $stmt->execute([$score, $time, $user_id]);
-    }
-
-    echo json_encode(["success" => true]);
-} catch (PDOException $e) {
-    echo json_encode(["success" => false, "error" => $e->getMessage()]);
+} else {
+    echo json_encode(['status' => 'error', 'message' => '❌ データ不足']);
 }
-?>

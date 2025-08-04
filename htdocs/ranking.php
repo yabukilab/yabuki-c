@@ -1,20 +1,30 @@
 <?php
-session_start();
-require_once 'db.php'; // DB接続用ファイル
+require 'db.php';
 
-try {
-    $stmt = $pdo->prepare("SELECT username, best_score, best_time, best_datetime 
-                           FROM users 
-                           WHERE best_score IS NOT NULL 
-                           ORDER BY best_score DESC, best_time ASC 
-                           LIMIT 10");
-    $stmt->execute();
-    $rankings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    echo "データ取得エラー: " . $e->getMessage();
-    exit;
-}
+$stmt = $pdo->query("
+    SELECT u.username, s.score, s.play_time, s.played_at
+    FROM scores s
+    JOIN users u ON s.user_id = u.id
+    ORDER BY s.score ASC, s.played_at ASC
+    LIMIT 10
+");
+$rankings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+<h2>全体ランキング</h2>
+<table border="1">
+    <tr><th>順位</th><th>ユーザー名</th><th>スコア</th><th>時間</th><th>日時</th></tr>
+    <?php foreach ($rankings as $i => $r): ?>
+        <tr>
+            <td><?= $i + 1 ?></td>
+            <td><?= htmlspecialchars($r['username']) ?></td>
+            <td><?= htmlspecialchars($r['score']) ?></td>
+            <td><?= htmlspecialchars($r['play_time']) ?></td>
+            <td><?= htmlspecialchars($r['played_at']) ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
 
 <!DOCTYPE html>
 <html>
