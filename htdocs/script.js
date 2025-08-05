@@ -29,7 +29,6 @@ let userId = parseInt(localStorage.getItem('user_id')) || null;
 let previousWord = null;
 let requiredInitial = null;
 
-
 function updateDisplays() {
   document.getElementById('timer').textContent = `残り時間: ${remainingTime}秒`;
   document.getElementById('turnCount').textContent = `ターン数: ${turnCount}`;
