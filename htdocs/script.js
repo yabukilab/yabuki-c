@@ -29,9 +29,31 @@ let userId = parseInt(localStorage.getItem('user_id')) || null;
 let previousWord = null;
 let requiredInitial = null;
 
+// 🔁 スコア保存関数（バックエンド連携）
+fetch('save_score.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+        user_id: localStorage.getItem('user_id'),
+        score: score,
+        time: playTime
+    })
+})
+.then(res => res.json())
+.then(data => {
+    if (data.success) {
+        alert(data.message);
+    } else {
+        alert(data.message);
+    }
+})
+.catch(error => {
+    alert('❌ 通信エラー：' + error.message);
+});
+
 function updateDisplays() {
-  document.getElementById('timer').textContent = `残り時間: ${remainingTime}秒`;
-  document.getElementById('turnCount').textContent = `ターン数: ${turnCount}`;
+  document.getElementById('timer').textContent = 残り時間: ${remainingTime}秒;
+  document.getElementById('turnCount').textContent = ターン数: ${turnCount};
 }
 
 function startTimer() {
@@ -48,7 +70,7 @@ function startTimer() {
 
       const log = document.getElementById('log');
       const endMessage = document.createElement('div');
-      endMessage.textContent = `⏰ 制限時間終了！合計ターン数: ${turnCount}`;
+      endMessage.textContent = ⏰ 制限時間終了！合計ターン数: ${turnCount};
       log.appendChild(endMessage);
       scrollLogToBottom();
 
@@ -80,7 +102,7 @@ function resetGame() {
   updateDisplays();
 
   const startMessage = document.createElement('div');
-  startMessage.textContent = `🎲 ゲーム開始：『${requiredInitial}』から始まる単語を入力してください！`;
+  startMessage.textContent = 🎲 ゲーム開始：『${requiredInitial}』から始まる単語を入力してください！;
   document.getElementById('log').appendChild(startMessage);
   scrollLogToBottom();
 
@@ -156,17 +178,17 @@ document.getElementById('submitBtn').addEventListener('click', () => {
       if (previousWord) {
         const expected = getValidLastChar(previousWord);
         if (firstChar !== expected) {
-          alert(`❌ 前の単語は「${previousWord}」です。「${expected}」で始まる単語を入力してください。`);
+          alert(❌ 前の単語は「${previousWord}」です。「${expected}」で始まる単語を入力してください。);
           return;
         }
       } else if (firstChar !== requiredInitial) {
-        alert(`❌ 最初の単語は「${requiredInitial}」で始まる必要があります。`);
+        alert(❌ 最初の単語は「${requiredInitial}」で始まる必要があります。);
         return;
       }
 
       const log = document.getElementById('log');
       const entry = document.createElement('div');
-      entry.textContent = `🧑 プレイヤー: ${wordHira}`;
+      entry.textContent = 🧑 プレイヤー: ${wordHira};
       log.appendChild(entry);
       scrollLogToBottom();
       input.value = "";
@@ -181,7 +203,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
         aiEntry.textContent = '🤖 コンピューター: （該当なし）';
       } else {
         const aiWord = available[Math.floor(Math.random() * available.length)];
-        aiEntry.textContent = `🤖 コンピューター: ${aiWord}`;
+        aiEntry.textContent = 🤖 コンピューター: ${aiWord};
         previousWord = aiWord;
         turnCount++;
         updateDisplays();
