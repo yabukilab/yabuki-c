@@ -35,7 +35,6 @@ fetch('save_score.php', {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
         user_id: localStorage.getItem('user_id'),
-        score: score,
         time: playTime
     })
 })
