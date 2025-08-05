@@ -29,17 +29,7 @@ let userId = parseInt(localStorage.getItem('user_id')) || null;
 let previousWord = null;
 let requiredInitial = null;
 
-// 🔁 スコア保存関数（バックエンド連携）
-fetch('save_score.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-        user_id: localStorage.getItem('user_id'),
-        score: score,
-        time: playTime
-    })
-})
-.then(res => res.json())
+then(res => res.json())
 .then(data => {
     if (data.success) {
         alert(data.message);
