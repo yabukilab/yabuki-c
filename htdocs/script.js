@@ -29,17 +29,6 @@ let userId = parseInt(localStorage.getItem('user_id')) || null;
 let previousWord = null;
 let requiredInitial = null;
 
-then(res => res.json())
-.then(data => {
-    if (data.success) {
-        alert(data.message);
-    } else {
-        alert(data.message);
-    }
-})
-.catch(error => {
-    alert('❌ 通信エラー：' + error.message);
-});
 
 function updateDisplays() {
   document.getElementById('timer').textContent = `残り時間: ${remainingTime}秒`;
