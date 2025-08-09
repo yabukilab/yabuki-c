@@ -1,43 +1,36 @@
 <?php
+# セッション開始
 session_start();
-$message = "";
-$userid = "";
-
 require "db.php";
 $pdo = $db;
 
-// フォーム処理
+# 初期変数
+$userid = "";
+$password = "";
+$error = "";
+
+# フォーム送信時の処理（POSTかつ通常フォーム）
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $userid = trim($_POST["userid"] ?? "");
     $password = $_POST["password"] ?? "";
 
+    # 入力チェック
     if (empty($userid) || empty($password)) {
-        $message = "※すべての項目を入力してください";
-    } elseif (strlen($password) < 6) {
-        $message = "※パスワードは6文字以上にしてください";
+        $error = "※ユーザーIDとパスワードを入力してください";
     } else {
-        // ユーザー名重複チェック
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
+        # DBからユーザー検索
+        $stmt = $pdo->prepare("SELECT id, username, password FROM users WHERE username = ?");
         $stmt->execute([$userid]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($stmt->fetch()) {
-            $message = "※このユーザーIDは既に使われています";
-        } else {
-            // パスワードをハッシュ化してDB登録
-            $hashed = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
-            $stmt->execute([$userid, $hashed]);
-
-            // ✅ mydb.sql に INSERT 文を追記する
-            $escapedUser = addslashes($userid);
-            $escapedHash = addslashes($hashed);
-            $sqlLine = "INSERT INTO users (username, password, is_admin) VALUES ('$escapedUser', '$escapedHash', 0);\n";
-
-            file_put_contents("mydb.sql", $sqlLine, FILE_APPEND | LOCK_EX);
-
-            // リダイレクト
-            header("Location: index.php?register=success");
+        # パスワード検証
+        if ($user && password_verify($password, $user["password"])) {
+            $_SESSION["user_id"] = $user["id"];
+            $_SESSION["username"] = $user["username"];
+            header("Location: menu.php"); // ✅ 成功時はメニューへ
             exit();
+        } else {
+            $error = "※IDまたはパスワードが正しくありません";
         }
     }
 }
@@ -48,10 +41,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>新規登録</title>
+  <title>ログイン</title>
   <link rel="stylesheet" href="newuserstyle.css" />
 
-    <style>
+  <style>
+    /* # CSS全般（registerと統一） */
     body {
       font-family: sans-serif;
       text-align: center;
@@ -65,9 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       width: 250px;
     }
     .error { color: red; }
-    
-   html, body {
-          height: 100%;
+
+    html, body {
+      height: 100%;
       margin: 0;
       font-family: 'Kosugi Maru', sans-serif;
       background: linear-gradient(to bottom right, #ffe0f0, #e0f7fa);
@@ -84,21 +78,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h2>新規登録</h2>
-    <form action="register.php" method="post">
+    <h2>ログイン</h2>
+
+    <!-- # 入力フォーム -->
+    <form action="index.php" method="post">
       <input type="text" name="userid" placeholder="ID" required value="<?= htmlspecialchars($userid) ?>" />
-      <input type="password" name="password" placeholder="パスワード（6文字以上）" required />
-      <?php if (!empty($message)): ?>
-        <div class="error"><?= htmlspecialchars($message) ?></div>
+      <input type="password" name="password" placeholder="パスワード" required />
+      <?php if (!empty($error)): ?>
+        <div class="error"><?= htmlspecialchars($error) ?></div>
       <?php endif; ?>
-      <button type="submit">登録する</button>
+      <button type="submit">ログインする</button>
     </form>
-    <p><a href="index.php">ログイン画面に戻る</a></p>
+
+    <!-- # 登録画面へのリンク -->
+    <p><a href="register.php">新規登録はこちら</a></p>
   </div>
 
-         <!-- バラバラに配置された絵文字たち -->
+  <!-- # 絵文字背景 -->
   <div class="emoji" style="top: 10%; left: 15%;">🍎</div>
   <div class="emoji" style="top: 20%; left: 70%;">🦍</div>
   <div class="emoji" style="top: 35%; left: 40%;">📯</div>
@@ -115,7 +114,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <div class="emoji" style="top: 90%; left: 20%;">🧸</div>
 </body>
 
-  <footer>© 2025 yabuki lab</footer>
+<footer>© 2025 yabuki lab</footer>
 </html>
-
-
