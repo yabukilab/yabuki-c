@@ -1,36 +1,45 @@
 <?php
 # セッション開始
 session_start();
+$message = "";
+$userid = "";
+
+# データベース接続ファイル読み込み
 require "db.php";
 $pdo = $db;
 
-# 初期変数
-$userid = "";
-$password = "";
-$error = "";
-
-# フォーム送信時の処理（POSTかつ通常フォーム）
+# フォーム送信時の処理
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $userid = trim($_POST["userid"] ?? "");
     $password = $_POST["password"] ?? "";
 
     # 入力チェック
     if (empty($userid) || empty($password)) {
-        $error = "※ユーザーIDとパスワードを入力してください";
+        $message = "※すべての項目を入力してください";
+    } elseif (strlen($password) < 6) {
+        $message = "※パスワードは6文字以上にしてください";
     } else {
-        # DBからユーザー検索
-        $stmt = $pdo->prepare("SELECT id, username, password FROM users WHERE username = ?");
+        # ユーザーIDの重複確認
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
         $stmt->execute([$userid]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        # パスワード検証
-        if ($user && password_verify($password, $user["password"])) {
-            $_SESSION["user_id"] = $user["id"];
-            $_SESSION["username"] = $user["username"];
-            header("Location: menu.php"); // ✅ 成功時はメニューへ
-            exit();
+        if ($stmt->fetch()) {
+            $message = "※このユーザーIDは既に使われています";
         } else {
-            $error = "※IDまたはパスワードが正しくありません";
+            # パスワードをハッシュ化してDB登録
+            $hashed = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
+            $stmt->execute([$userid, $hashed]);
+
+            # mydb.sqlにINSERT文を追記
+            $escapedUser = addslashes($userid);
+            $escapedHash = addslashes($hashed);
+            $sqlLine = "INSERT INTO users (username, password, is_admin) VALUES ('$escapedUser', '$escapedHash', 0);\n";
+            file_put_contents("mydb.sql", $sqlLine, FILE_APPEND | LOCK_EX);
+
+            # 成功時はログイン画面にリダイレクト
+            header("Location: index.php?register=success");
+            exit();
         }
     }
 }
@@ -41,16 +50,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ログイン</title>
+  <title>新規登録</title>
   <link rel="stylesheet" href="newuserstyle.css" />
 
   <style>
-    /* # CSS全般（registerと統一） */
-    body {
-      font-family: sans-serif;
+    /* # フォーム・背景の基本デザイン */
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Kosugi Maru', sans-serif;
+      background: linear-gradient(to bottom right, #ffe0f0, #e0f7fa);
+      overflow: hidden;
+      position: relative;
       text-align: center;
       padding: 40px;
-      background: #f0f0f0;
     }
     input, button {
       margin: 10px;
@@ -60,15 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     .error { color: red; }
 
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: 'Kosugi Maru', sans-serif;
-      background: linear-gradient(to bottom right, #ffe0f0, #e0f7fa);
-      overflow: hidden;
-      position: relative;
-    }
-
+    /* # 背景用の絵文字装飾 */
     .emoji {
       position: absolute;
       font-size: 50px;
@@ -78,26 +83,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
   </style>
 </head>
-
 <body>
   <div class="container">
-    <h2>ログイン</h2>
+    <h2>新規登録</h2>
 
-    <!-- # 入力フォーム -->
-    <form action="index.php" method="post">
+    <!-- # 登録フォーム -->
+    <form action="register.php" method="post">
       <input type="text" name="userid" placeholder="ID" required value="<?= htmlspecialchars($userid) ?>" />
-      <input type="password" name="password" placeholder="パスワード" required />
-      <?php if (!empty($error)): ?>
-        <div class="error"><?= htmlspecialchars($error) ?></div>
+      <input type="password" name="password" placeholder="パスワード（6文字以上）" required />
+      <?php if (!empty($message)): ?>
+        <div class="error"><?= htmlspecialchars($message) ?></div>
       <?php endif; ?>
-      <button type="submit">ログインする</button>
+      <button type="submit">登録する</button>
     </form>
 
-    <!-- # 登録画面へのリンク -->
-    <p><a href="register.php">新規登録はこちら</a></p>
+    <!-- # ログイン画面へのリンク -->
+    <p><a href="index.php">ログイン画面に戻る</a></p>
   </div>
 
-  <!-- # 絵文字背景 -->
+  <!-- # 絵文字背景（演出） -->
   <div class="emoji" style="top: 10%; left: 15%;">🍎</div>
   <div class="emoji" style="top: 20%; left: 70%;">🦍</div>
   <div class="emoji" style="top: 35%; left: 40%;">📯</div>
@@ -112,7 +116,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <div class="emoji" style="top: 15%; left: 55%;">🐘</div>
   <div class="emoji" style="top: 70%; left: 35%;">🎈</div>
   <div class="emoji" style="top: 90%; left: 20%;">🧸</div>
-</body>
 
-<footer>© 2025 yabuki lab</footer>
+  <!-- # フッター -->
+  <footer>© 2025 yabuki lab</footer>
+</body>
 </html>
