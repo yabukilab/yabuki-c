@@ -1,79 +1,51 @@
 <?php
 session_start();
-if (!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])) {
-  header("Location: index.php");
-  exit();
-}
-$userId = $_SESSION["user_id"];
-$username = $_SESSION["username"];
-?>
 
+// ログイン済みならユーザー情報を渡す
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : "guest";
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>しりとりバトル</title>
-  <link rel="stylesheet" href="style.css">
-  <script>
-    localStorage.setItem("user_id", <?= json_encode($userId) ?>);
-    localStorage.setItem("currentUser", <?= json_encode($username) ?>);
-  </script>
+    <meta charset="UTF-8">
+    <title>しりとりゲーム</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>しりとりバトル</h1>
+    <h1>しりとりゲーム</h1>
 
-  <div id="game-area">
-    <div id="timer">残り時間: 60秒</div>
-    <div id="turnCount">ターン数: 0</div>
-    <div id="log"></div>
-    <input type="text" id="playerInput" placeholder="単語を入力してください">
-    <button id="submitBtn">送信</button>
-    <button id="restartBtn" style="display: none;">リスタート</button>
-    <button id="menuBtn" style="display: none;" onclick="location.href='menu.php'">メニュー</button>
-    <button id="scoreBtn" style="display: none;" onclick="location.href='user_scores.php'">成績</button>
-    <button id="scoreBtn" style="display: none;" onclick="location.href='ranking.php'">ランキング</button>
-  </div>
+    <!-- ゲーム情報 -->
+    <div id="status">
+        <span id="timer">残り時間: 60秒</span>　
+        <span id="turnCount">ターン数: 0</span>
+    </div>
 
-  <script src="script.js"></script>
+    <!-- ゲームログ -->
+    <div id="log" style="border:1px solid #ccc; width:500px; height:300px; overflow-y:scroll; margin:10px auto; padding:5px; background:#fff;">
+        <!-- プレイ中の会話ログがここに追加される -->
+    </div>
 
-  <script>
-  function saveScore(userId, score, time) {
-    const scoreData = {
-      user_id: userId,
-      score: score,
-      play_time: time
-    };
+    <!-- 入力フォーム -->
+    <div id="controls" style="margin-top:10px;">
+        <input type="text" id="playerInput" placeholder="単語を入力" autofocus>
+        <button id="submitBtn">送信</button>
+    </div>
 
-    fetch("save_score.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(scoreData)
-    })
-    .then(res => res.json())
-    .then(result => {
-      if (result.success) {
-        alert("スコア保存完了！");
-      } else {
-        alert("保存失敗：" + result.error);
-      }
-    });
-  }
+    <!-- 操作ボタン -->
+    <div id="actions" style="margin-top:20px;">
+        <button id="restartBtn" style="display:none;">🔄 もう一度</button>
+        <button id="menuBtn" style="display:none;">🏠 メニューへ</button>
+        <button id="scoreBtn" style="display:none;">📊 スコアを見る</button>
+    </div>
 
-  function endGame() {
-    clearInterval(timerId);
-    document.getElementById("restartBtn").style.display = "inline-block";
-    document.getElementById("menuBtn").style.display = "inline-block";
-    document.getElementById("scoreBtn").style.display = "inline-block";
-    logMessage("ゲーム終了！");
+    <!-- ユーザー情報を JS に渡す -->
+    <script>
+        localStorage.setItem("user_id", "<?php echo $user_id ? $user_id : ''; ?>");
+        localStorage.setItem("currentUser", "<?php echo htmlspecialchars($username, ENT_QUOTES, 'UTF-8'); ?>");
+    </script>
 
-    const score = turnCount;
-    const timeTaken = 60 - timeLeft;
-    const user_Id = localStorage.getItem("user_id");
-
-    saveScore(user_Id, score, timeTaken);
-  }
-  </script>
-
+    <!-- ゲーム用スクリプト -->
+    <script src="script.js"></script>
 </body>
 </html>

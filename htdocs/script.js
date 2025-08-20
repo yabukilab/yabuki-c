@@ -1,11 +1,15 @@
-// カタカナ→ひらがな変換関数
+// ==============================
+// 共通関数
+// ==============================
+
+// カタカナ→ひらがな変換
 function katakanaToHiragana(str) {
   return str.replace(/[ァ-ヶー]/g, ch =>
     String.fromCharCode(ch.charCodeAt(0) - 0x60)
   );
 }
 
-// 小文字を大文字に変換
+// 小文字→大文字に正規化
 function normalizeLastChar(char) {
   const map = {
     'ぁ': 'あ', 'ぃ': 'い', 'ぅ': 'う', 'ぇ': 'え', 'ぉ': 'お',
@@ -14,83 +18,107 @@ function normalizeLastChar(char) {
   return map[char] || char;
 }
 
-// ログを自動スクロール
+// ログを最下部までスクロール
 function scrollLogToBottom() {
   const log = document.getElementById('log');
   log.scrollTop = log.scrollHeight;
 }
 
+// ==============================
+// ゲーム用変数
+// ==============================
 let remainingTime = 60;
 let gameInterval = null;
 let turnCount = 0;
 let gameEnded = false;
-let currentUser = localStorage.getItem('currentUser') || "guest";
-let userId = parseInt(localStorage.getItem('user_id')) || null;
 let previousWord = null;
 let requiredInitial = null;
+let usedWords = []; // プレイヤー+AI両方の履歴
 
-// 🔁 スコア保存関数（バックエンド連携）
-fetch('save_score.php', {
+// ユーザー情報（localStorageから取得）
+let userId = parseInt(localStorage.getItem('user_id')) || null;
+
+// ==============================
+// サーバーへスコア保存
+// ==============================
+function saveScoreToServer(userId, score, playTime) {
+  fetch('save_score.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
-        user_id: localStorage.getItem('user_id'),
-        time: playTime
+      user_id: userId,
+      score: score,
+      play_time: playTime
     })
-})
-.then(res => res.json())
-.then(data => {
-    if (data.success) {
-        alert(data.message);
-    } else {
-        alert(data.message);
-    }
-})
-.catch(error => {
-    alert('❌ 通信エラー：' + error.message);
-});
-
-function updateDisplays() {
-  document.getElementById('timer').textContent = 残り時間: ${remainingTime}秒;
-  document.getElementById('turnCount').textContent = ターン数: ${turnCount};
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("📡 スコア保存結果:", data);
+    })
+    .catch(error => {
+      console.error('❌ 通信エラー:', error);
+    });
 }
 
+// ==============================
+// 画面表示の更新
+// ==============================
+function updateDisplays() {
+  document.getElementById('timer').textContent = `残り時間: ${remainingTime}秒`;
+  document.getElementById('turnCount').textContent = `ターン数: ${turnCount}`;
+}
+
+// ==============================
+// タイマー開始
+// ==============================
 function startTimer() {
   updateDisplays();
   gameInterval = setInterval(() => {
     if (remainingTime <= 0) {
-      clearInterval(gameInterval);
-      gameEnded = true;
-      document.getElementById('playerInput').disabled = true;
-      document.getElementById('submitBtn').disabled = true;
-      document.getElementById('restartBtn').style.display = 'inline-block';
-      document.getElementById('menuBtn').style.display = 'inline-block';
-      document.getElementById('scoreBtn').style.display = 'inline-block';
-
-      const log = document.getElementById('log');
-      const endMessage = document.createElement('div');
-      endMessage.textContent = ⏰ 制限時間終了！合計ターン数: ${turnCount};
-      log.appendChild(endMessage);
-      scrollLogToBottom();
-
-      if (userId) {
-        saveScoreToServer(userId, turnCount, 60);
-      }
-
-      return;
+      endGame("⏰ 制限時間終了！");
+    } else {
+      remainingTime--;
+      updateDisplays();
     }
-    remainingTime--;
-    updateDisplays();
   }, 1000);
 }
 
+// ==============================
+// ゲーム終了処理
+// ==============================
+function endGame(message) {
+  clearInterval(gameInterval);
+  gameEnded = true;
+
+  document.getElementById('playerInput').disabled = true;
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('restartBtn').style.display = 'inline-block';
+  document.getElementById('menuBtn').style.display = 'inline-block';
+  document.getElementById('scoreBtn').style.display = 'inline-block';
+
+  const log = document.getElementById('log');
+  const endMessage = document.createElement('div');
+  endMessage.textContent = `${message} 合計ターン数: ${turnCount}`;
+  log.appendChild(endMessage);
+  scrollLogToBottom();
+
+  if (userId) {
+    saveScoreToServer(userId, turnCount, 60 - remainingTime);
+  }
+}
+
+// ==============================
+// ゲーム初期化
+// ==============================
 function resetGame() {
   clearInterval(gameInterval);
   remainingTime = 60;
   turnCount = 0;
   gameEnded = false;
   previousWord = null;
+  usedWords = [];
   requiredInitial = getRandomHiragana();
+
   document.getElementById('log').innerHTML = "";
   document.getElementById('playerInput').disabled = false;
   document.getElementById('submitBtn').disabled = false;
@@ -101,18 +129,16 @@ function resetGame() {
   updateDisplays();
 
   const startMessage = document.createElement('div');
-  startMessage.textContent = 🎲 ゲーム開始：『${requiredInitial}』から始まる単語を入力してください！;
+  startMessage.textContent = `🎲 ゲーム開始：「${requiredInitial}」から始まる単語を入力してください！`;
   document.getElementById('log').appendChild(startMessage);
   scrollLogToBottom();
 
   startTimer();
 }
 
-function getUsedWords() {
-  const log = document.getElementById('log');
-  return Array.from(log.children).map(div => div.textContent.split(': ')[1]);
-}
-
+// ==============================
+// 単語関連処理
+// ==============================
 function getValidLastChar(word) {
   if (!word) return null;
   const w = katakanaToHiragana(word);
@@ -131,12 +157,15 @@ function getRandomHiragana() {
   return base[Math.floor(Math.random() * base.length)];
 }
 
+// ==============================
+// DOMロード時の処理
+// ==============================
 document.addEventListener('DOMContentLoaded', () => {
   resetGame();
 
   document.getElementById('restartBtn').addEventListener('click', resetGame);
   document.getElementById('scoreBtn').addEventListener('click', () => {
-    location.href = 'score.html';
+    location.href = 'user_scores.php';
   });
   document.getElementById('menuBtn').addEventListener('click', () => {
     location.href = 'menu.php';
@@ -149,6 +178,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// ==============================
+// プレイヤー入力処理
+// ==============================
 document.getElementById('submitBtn').addEventListener('click', () => {
   if (gameEnded) return;
 
@@ -162,52 +194,58 @@ document.getElementById('submitBtn').addEventListener('click', () => {
       const wordHira = katakanaToHiragana(word);
       const allWords = Object.values(dictionary).flat();
 
+      // 単語の妥当性チェック
       if (!allWords.includes(wordHira)) {
         alert("❌ この単語は辞書に登録されていません。");
         return;
       }
-
-      const usedWords = getUsedWords();
       if (usedWords.includes(wordHira)) {
         alert("❌ この単語はすでに使われています。");
         return;
       }
-
-      const firstChar = getValidFirstChar(word);
       if (previousWord) {
         const expected = getValidLastChar(previousWord);
-        if (firstChar !== expected) {
-          alert(❌ 前の単語は「${previousWord}」です。「${expected}」で始まる単語を入力してください。);
+        if (getValidFirstChar(wordHira) !== expected) {
+          alert(`❌ 前の単語は「${previousWord}」です。「${expected}」で始まる単語を入力してください。`);
           return;
         }
-      } else if (firstChar !== requiredInitial) {
-        alert(❌ 最初の単語は「${requiredInitial}」で始まる必要があります。);
+      } else if (getValidFirstChar(wordHira) !== requiredInitial) {
+        alert(`❌ 最初の単語は「${requiredInitial}」で始まる必要があります。`);
         return;
       }
 
+      // プレイヤーの入力をログに追加
       const log = document.getElementById('log');
       const entry = document.createElement('div');
-      entry.textContent = 🧑 プレイヤー: ${wordHira};
+      entry.textContent = `🧑 プレイヤー: ${wordHira}`;
       log.appendChild(entry);
       scrollLogToBottom();
+
       input.value = "";
       previousWord = wordHira;
+      usedWords.push(wordHira);
+      turnCount++;
+      updateDisplays();
 
-      const lastChar = getValidLastChar(word);
+      // AIの応答処理
+      const lastChar = getValidLastChar(wordHira);
       const candidates = dictionary[lastChar] || [];
       const available = candidates.filter(w => !usedWords.includes(w));
 
       const aiEntry = document.createElement('div');
       if (available.length === 0) {
         aiEntry.textContent = '🤖 コンピューター: （該当なし）';
+        log.appendChild(aiEntry);
+        endGame("🤖 コンピューターが詰みました！");
       } else {
         const aiWord = available[Math.floor(Math.random() * available.length)];
-        aiEntry.textContent = 🤖 コンピューター: ${aiWord};
+        aiEntry.textContent = `🤖 コンピューター: ${aiWord}`;
+        log.appendChild(aiEntry);
         previousWord = aiWord;
+        usedWords.push(aiWord);
         turnCount++;
         updateDisplays();
       }
-      log.appendChild(aiEntry);
       scrollLogToBottom();
     });
 });
