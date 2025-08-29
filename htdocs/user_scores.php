@@ -1,15 +1,13 @@
 <?php
-# 成績：ログイン中ユーザーの上位10件
-# 失敗していた原因：$pdo が未定義。db.php の $db を $pdo に束縛して解決。
-
+# user_scores.php — ログインユーザーの上位10件
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header('Location: index.php');
     exit;
 }
 
-require __DIR__ . '/db.php';   # PDOは $db で提供される
-$pdo = $db;                    # ← これがないと $pdo は null のまま
+require_once __DIR__ . '/db.php';
+$pdo = $db;
 
 $userId = (int)$_SESSION['user_id'];
 
@@ -33,7 +31,7 @@ try {
     exit;
 }
 
-function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
+// db.php 側の h() を使う（db.php に h が定義されている前提）
 ?>
 <!DOCTYPE html>
 <html lang="ja">

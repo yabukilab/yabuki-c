@@ -1,9 +1,7 @@
 <?php
-# ランキング：全ユーザーから上位10件
-# 失敗していた原因：$pdo が未定義。db.php の $db を $pdo に束縛して解決。
-
-require __DIR__ . '/db.php';   # PDOは $db で提供される
-$pdo = $db;                    # ← これがないと $pdo は null のまま
+# ranking.php — 全体ランキング TOP10
+require_once __DIR__ . '/db.php';   # PDOは $db で提供される
+$pdo = $db;                         # $pdo を使う既存コードに合わせる
 
 try {
     $sql = "
@@ -24,7 +22,7 @@ try {
     exit;
 }
 
-function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
+// db.php 側の h() を使う（db.php に h が定義されている前提）
 ?>
 <!DOCTYPE html>
 <html lang="ja">
