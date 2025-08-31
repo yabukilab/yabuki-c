@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// ログイン済みならユーザー情報を渡す
+// ログイン済みならユーザー情報を渡す（PHP変数として保持するだけ）
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : "guest";
 ?>
@@ -35,15 +35,12 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : "guest";
     <!-- 操作ボタン -->
     <div id="actions" style="margin-top:20px;">
         <button id="restartBtn" style="display:none;">🔄 もう一度</button>
-        <button id="menuBtn" style="display:none;">🏠 メニューへ</button>
-        <button id="scoreBtn" style="display:none;">📊 スコアを見る</button>
+        <button id="menuBtn" style="display:none;" onclick="location.href='menu.php'">🏠 メニューへ</button>
+        <button id="scoreBtn" style="display:none;" onclick="location.href='show-score.php'">📊 スコアを見る</button>
     </div>
 
-    <!-- ユーザー情報を JS に渡す -->
-    <script>
-        localStorage.setItem("user_id", "<?php echo $user_id ? $user_id : ''; ?>");
-        localStorage.setItem("currentUser", "<?php echo htmlspecialchars($username, ENT_QUOTES, 'UTF-8'); ?>");
-    </script>
+    <!-- ★ ここでは localStorage を上書きしない -->
+    <!-- menu.php で保存済みの user_id / currentUser をそのまま利用する -->
 
     <!-- ゲーム用スクリプト -->
     <script src="script.js"></script>
