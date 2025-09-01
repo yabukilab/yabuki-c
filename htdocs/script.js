@@ -158,6 +158,15 @@ function getRandomHiragana() {
 }
 
 // ==============================
+// 共通: 単語が辞書に存在するかチェック
+// ==============================
+function isWordInDictionary(word, dictionary) {
+  const wordHira = katakanaToHiragana(word);
+  const allWords = Object.values(dictionary).flat();
+  return allWords.includes(wordHira);
+}
+
+// ==============================
 // DOMロード時の処理
 // ==============================
 document.addEventListener('DOMContentLoaded', () => {
@@ -192,10 +201,9 @@ document.getElementById('submitBtn').addEventListener('click', () => {
     .then(response => response.json())
     .then(dictionary => {
       const wordHira = katakanaToHiragana(word);
-      const allWords = Object.values(dictionary).flat();
 
-      // 単語の妥当性チェック
-      if (!allWords.includes(wordHira)) {
+      // ✅ 共通関数で辞書チェック
+      if (!isWordInDictionary(word, dictionary)) {
         alert("❌ この単語は辞書に登録されていません。");
         return;
       }
