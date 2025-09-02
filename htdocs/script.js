@@ -2,32 +2,20 @@
 // 共通関数
 // ==============================
 
-// カタカナ→ひらがな変換
+// カタカナ→ひらがな変換（伸ばし棒は残す）
 function katakanaToHiragana(str) {
-  return str.replace(/[ァ-ヶー]/g, ch =>
+  return str.replace(/[ァ-ヶ]/g, ch =>
     String.fromCharCode(ch.charCodeAt(0) - 0x60)
   );
 }
 
 // 小文字→大文字に正規化
-function normalizeChar(char) {
+function normalizeLastChar(char) {
   const map = {
     'ぁ': 'あ', 'ぃ': 'い', 'ぅ': 'う', 'ぇ': 'え', 'ぉ': 'お',
     'ゃ': 'や', 'ゅ': 'ゆ', 'ょ': 'よ'
   };
   return map[char] || char;
-}
-
-// 単語を正規化（カタカナ→ひらがな、最後の伸ばし棒処理）
-function normalizeWord(word) {
-  if (!word) return "";
-  let w = katakanaToHiragana(word);
-  // 最後が「ー」の場合は直前の母音に置き換え
-  if (w.endsWith("ー") && w.length > 1) {
-    const before = w.charAt(w.length - 2);
-    w = w.slice(0, -1) + before;
-  }
-  return w;
 }
 
 // ログを最下部までスクロール
@@ -45,7 +33,7 @@ let turnCount = 0;
 let gameEnded = false;
 let previousWord = null;
 let requiredInitial = null;
-let usedWords = [];
+let usedWords = []; // プレイヤー+AI両方の履歴
 
 // ユーザー情報（localStorageから取得）
 let userId = parseInt(localStorage.getItem('user_id')) || null;
@@ -73,7 +61,7 @@ function saveScoreToServer(userId, score, playTime) {
 }
 
 // ==============================
-// 画面表示更新
+// 画面表示の更新
 // ==============================
 function updateDisplays() {
   document.getElementById('timer').textContent = `残り時間: ${remainingTime}秒`;
@@ -152,13 +140,20 @@ function resetGame() {
 // 単語関連処理
 // ==============================
 function getValidLastChar(word) {
-  const w = normalizeWord(word);
-  return normalizeChar(w.slice(-1));
+  if (!word) return null;
+  const w = katakanaToHiragana(word);
+  let last = w.slice(-1);
+
+  // 末尾が伸ばし棒なら直前の文字を採用
+  if (last === 'ー' && w.length > 1) {
+    last = w.slice(-2, -1);
+  }
+  return normalizeLastChar(last);
 }
 
 function getValidFirstChar(word) {
-  const w = normalizeWord(word);
-  return normalizeChar(w[0]);
+  const w = katakanaToHiragana(word);
+  return normalizeLastChar(w[0]);
 }
 
 function getRandomHiragana() {
@@ -167,10 +162,10 @@ function getRandomHiragana() {
 }
 
 // ==============================
-// 辞書チェック
+// 共通: 単語が辞書に存在するかチェック
 // ==============================
 function isWordInDictionary(word, dictionary) {
-  const wordHira = normalizeWord(word);
+  const wordHira = katakanaToHiragana(word);
   const allWords = Object.values(dictionary).flat();
   return allWords.includes(wordHira);
 }
@@ -209,10 +204,10 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   fetch('./data/words_large_corrected.json')
     .then(response => response.json())
     .then(dictionary => {
-      const wordHira = normalizeWord(word);
+      const wordHira = katakanaToHiragana(word);
 
       // ✅ 共通関数で辞書チェック
-      if (!isWordInDictionary(wordHira, dictionary)) {
+      if (!isWordInDictionary(word, dictionary)) {
         alert("❌ この単語は辞書に登録されていません。");
         return;
       }
@@ -231,7 +226,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
         return;
       }
 
-      // プレイヤー入力をログに追加
+      // プレイヤーの入力をログに追加
       const log = document.getElementById('log');
       const entry = document.createElement('div');
       entry.textContent = `🧑 プレイヤー: ${wordHira}`;
@@ -244,10 +239,10 @@ document.getElementById('submitBtn').addEventListener('click', () => {
       turnCount++;
       updateDisplays();
 
-      // AI応答処理
+      // AIの応答処理
       const lastChar = getValidLastChar(wordHira);
       const candidates = dictionary[lastChar] || [];
-      const available = candidates.filter(w => !usedWords.includes(normalizeWord(w)));
+      const available = candidates.filter(w => !usedWords.includes(w));
 
       const aiEntry = document.createElement('div');
       if (available.length === 0) {
@@ -255,7 +250,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
         log.appendChild(aiEntry);
         endGame("🤖 コンピューターが詰みました！");
       } else {
-        const aiWord = normalizeWord(available[Math.floor(Math.random() * available.length)]);
+        const aiWord = available[Math.floor(Math.random() * available.length)];
         aiEntry.textContent = `🤖 コンピューター: ${aiWord}`;
         log.appendChild(aiEntry);
         previousWord = aiWord;
