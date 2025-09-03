@@ -1,66 +1,48 @@
 <?php
-# ranking.php — 全体ランキング TOP10
-require_once __DIR__ . '/db.php';   # PDOは $db で提供される
-$pdo = $db;                         # $pdo を使う既存コードに合わせる
+require 'db.php';
+$pdo = $db;
 
-try {
-    $sql = "
-        SELECT u.username, s.score, s.play_time, s.played_at
-        FROM score s
-        JOIN users u ON s.user_id = u.id
-        ORDER BY s.score DESC, s.play_time ASC, s.played_at ASC
-        LIMIT 10
-    ";
-    $stmt = $pdo->query($sql);
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Throwable $e) {
-    http_response_code(500);
-    echo "<p>ランキング取得中にエラーが発生しました。</p>";
-    if (ini_get('display_errors')) {
-        echo "<pre>" . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</pre>";
-    }
-    exit;
-}
-
-// db.php 側の h() を使う（db.php に h が定義されている前提）
+// 最新のランキングTOP10を取得（スコア降順 → タイム昇順 → 日付昇順）
+$sql = "
+  SELECT u.username, s.score, s.play_time, s.played_at
+  FROM score s
+  JOIN users u ON s.user_id = u.id
+  ORDER BY s.score DESC, s.play_time ASC, s.played_at ASC
+  LIMIT 10
+";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$ranking = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>全体ランキング</title>
+  <title>ランキング</title>
   <style>
-    body { font-family: sans-serif; text-align:center; }
-    table { margin:20px auto; border-collapse: collapse; min-width: 720px; }
-    th, td { border:1px solid #999; padding:10px; }
-    th { background:#f4f4f4; }
+    table { border-collapse: collapse; margin: 20px auto; }
+    th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: center; }
   </style>
 </head>
 <body>
-  <h1>🏆 全体ランキング TOP10</h1>
+  <h2 style="text-align:center;">🏆 ランキング TOP10</h2>
   <table>
     <tr>
-      <th>順位</th>
-      <th>ユーザー名</th>
-      <th>スコア</th>
-      <th>タイム</th>
-      <th>日時</th>
+      <th>順位</th><th>ユーザー名</th><th>スコア</th><th>タイム</th><th>日時</th>
     </tr>
-    <?php if (empty($rows)): ?>
-      <tr><td colspan="5">記録がまだありません</td></tr>
-    <?php else: ?>
-      <?php foreach ($rows as $i => $r): ?>
-        <tr>
-          <td><?= $i + 1 ?></td>
-          <td><?= h($r['username']) ?></td>
-          <td><?= (int)$r['score'] ?></td>
-          <td><?= (int)$r['play_time'] ?>秒</td>
-          <td><?= h($r['played_at']) ?></td>
-        </tr>
-      <?php endforeach; ?>
-    <?php endif; ?>
+    <?php
+    $rank = 1;
+    foreach ($ranking as $row):
+    ?>
+    <tr>
+      <td><?= $rank++ ?>位</td>
+      <td><?= htmlspecialchars($row['username']) ?></td>
+      <td><?= htmlspecialchars($row['score']) ?></td>
+      <td><?= htmlspecialchars($row['play_time']) ?> 秒</td>
+      <td><?= htmlspecialchars($row['played_at']) ?></td>
+    </tr>
+    <?php endforeach; ?>
   </table>
-
-  <p><a href="menu.php">メニューに戻る</a></p>
+  <p style="text-align:center;"><a href="menu.php">🏠 メニューに戻る</a></p>
 </body>
 </html>
