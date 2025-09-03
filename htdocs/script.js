@@ -9,13 +9,33 @@ function katakanaToHiragana(str) {
   );
 }
 
-// 小文字→大文字に正規化
-function normalizeLastChar(char) {
+// 小文字正規化（ゃ→や など）
+function normalizeSmallKana(char) {
   const map = {
     'ぁ': 'あ', 'ぃ': 'い', 'ぅ': 'う', 'ぇ': 'え', 'ぉ': 'お',
     'ゃ': 'や', 'ゅ': 'ゆ', 'ょ': 'よ'
   };
   return map[char] || char;
+}
+
+// 単語の末尾を取得（伸ばし棒は直前の文字を利用）
+function getValidLastChar(word) {
+  if (!word) return null;
+  const w = katakanaToHiragana(word);
+  let last = w.slice(-1);
+
+  // 末尾が伸ばし棒なら直前の文字を見る
+  if (last === 'ー' && w.length > 1) {
+    last = w.slice(-2, -1);
+  }
+
+  return normalizeSmallKana(last);
+}
+
+// 単語の先頭を取得
+function getValidFirstChar(word) {
+  const w = katakanaToHiragana(word);
+  return normalizeSmallKana(w[0]);
 }
 
 // ログを最下部までスクロール
@@ -139,31 +159,12 @@ function resetGame() {
 // ==============================
 // 単語関連処理
 // ==============================
-function getValidLastChar(word) {
-  if (!word) return null;
-  const w = katakanaToHiragana(word);
-  let last = w.slice(-1);
-
-  // 末尾が伸ばし棒なら直前の文字を採用
-  if (last === 'ー' && w.length > 1) {
-    last = w.slice(-2, -1);
-  }
-  return normalizeLastChar(last);
-}
-
-function getValidFirstChar(word) {
-  const w = katakanaToHiragana(word);
-  return normalizeLastChar(w[0]);
-}
-
 function getRandomHiragana() {
   const base = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわ';
   return base[Math.floor(Math.random() * base.length)];
 }
 
-// ==============================
 // 共通: 単語が辞書に存在するかチェック
-// ==============================
 function isWordInDictionary(word, dictionary) {
   const wordHira = katakanaToHiragana(word);
   const allWords = Object.values(dictionary).flat();
@@ -229,18 +230,18 @@ document.getElementById('submitBtn').addEventListener('click', () => {
       // プレイヤーの入力をログに追加
       const log = document.getElementById('log');
       const entry = document.createElement('div');
-      entry.textContent = `🧑 プレイヤー: ${wordHira}`;
+      entry.textContent = `🧑 プレイヤー: ${word}`;
       log.appendChild(entry);
       scrollLogToBottom();
 
       input.value = "";
-      previousWord = wordHira;
+      previousWord = word;
       usedWords.push(wordHira);
       turnCount++;
       updateDisplays();
 
       // AIの応答処理
-      const lastChar = getValidLastChar(wordHira);
+      const lastChar = getValidLastChar(word);
       const candidates = dictionary[lastChar] || [];
       const available = candidates.filter(w => !usedWords.includes(w));
 
