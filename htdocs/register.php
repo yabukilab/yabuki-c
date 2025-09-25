@@ -3,9 +3,10 @@ session_start();
 $message = "";
 $userid = "";
 
-require "db.php";
+require "db.php";   // $db を返す想定
 $pdo = $db;
 
+// POST 受け取り
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $userid = trim($_POST["userid"] ?? "");
     $password = $_POST["password"] ?? "";
@@ -15,23 +16,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } elseif (strlen($password) < 6) {
         $message = "※パスワードは6文字以上にしてください";
     } else {
+        // 既存ユーザーID確認
         $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
         $stmt->execute([$userid]);
 
         if ($stmt->fetch()) {
             $message = "※このユーザーIDは既に使われています";
         } else {
+            // 新規登録処理
             $hashed = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
             $stmt->execute([$userid, $hashed]);
 
-            // mydb.sql に追記
-            $escapedUser = addslashes($userid);
-            $escapedHash = addslashes($hashed);
-            $sqlLine = "INSERT INTO users (username, password, is_admin) VALUES ('$escapedUser', '$escapedHash', 0);\n";
-            file_put_contents("mydb.sql", $sqlLine, FILE_APPEND | LOCK_EX);
-
-            // 成功メッセージを設定（リダイレクトしない）
+            // ✅ 成功したら通知メッセージを出す
             $message = "✅ 新規登録が完了しました！ログイン画面からログインしてください。";
         }
     }
@@ -46,15 +43,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <link rel="stylesheet" href="newuserstyle.css" />
   <style>
     html, body {
-      height: 100%; margin: 0; font-family: 'Kosugi Maru', sans-serif;
+      height: 100%; margin: 0;
+      font-family: 'Kosugi Maru', sans-serif;
       background: linear-gradient(to bottom right, #ffe0f0, #e0f7fa);
       text-align: center; padding: 40px;
+      overflow: hidden; /* ←背景絵文字のため */
+      position: relative;
     }
     input, button {
-      margin: 10px; padding: 10px; font-size: 16px; width: 250px;
+      margin: 10px; padding: 10px;
+      font-size: 16px; width: 250px;
     }
     .error { color: red; }
     .success { color: green; font-weight: bold; }
+    .emoji {
+      position: absolute;
+      font-size: 50px;
+      opacity: 0.12;
+      pointer-events: none;
+      animation: float 10s infinite ease-in-out alternate;
+    }
+    @keyframes float {
+      from { transform: translateY(0px); }
+      to   { transform: translateY(-20px); }
+    }
   </style>
 </head>
 <body>
@@ -73,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <p><a href="index.php">ログイン画面に戻る</a></p>
   </div>
 
-  <!-- # 絵文字背景（演出） -->
+  <!-- 🎨 背景の絵文字 -->
   <div class="emoji" style="top: 10%; left: 15%;">🍎</div>
   <div class="emoji" style="top: 20%; left: 70%;">🦍</div>
   <div class="emoji" style="top: 35%; left: 40%;">📯</div>
@@ -89,7 +101,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <div class="emoji" style="top: 70%; left: 35%;">🎈</div>
   <div class="emoji" style="top: 90%; left: 20%;">🧸</div>
 
-  <!-- # フッター -->
   <footer>© 2025 yabuki lab</footer>
 </body>
 </html>
