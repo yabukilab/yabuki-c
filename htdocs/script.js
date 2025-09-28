@@ -9,7 +9,7 @@ function katakanaToHiragana(str) {
   );
 }
 
-// 小文字→大文字に正規化（ぁぃぅぇぉゃゅょ を  あいうえおやゆよ に）
+// 小文字→大文字に正規化（ぁぃぅぇぉゃゅょ を あいうえおやゆよ に）
 function normalizeSmallKana(char) {
   const map = {
     'ぁ': 'あ', 'ぃ': 'い', 'ぅ': 'う', 'ぇ': 'え', 'ぉ': 'お',
@@ -134,7 +134,6 @@ function getRandomInt(max) {
 // 辞書チェック（汎用）
 // ==============================
 function isWordInDictionaryAsHiragana(wordHira, dictionary) {
-  // wordHira はすでに katakanaToHiragana により平仮名化されている想定
   const all = Object.values(dictionary).flat();
   return all.includes(wordHira);
 }
@@ -160,7 +159,6 @@ function resetGame() {
   document.getElementById('scoreBtn').style.display = 'none';
   updateDisplays();
 
-  // 辞書ファイルを読み、全単語からランダムに1語を選択して開始語とする
   fetch('./data/words_large_corrected.json')
     .then(res => res.json())
     .then(dictionary => {
@@ -170,7 +168,7 @@ function resetGame() {
         log.textContent = '辞書が読み込めません。';
         return;
       }
-      const startWord = allWords[getRandomInt(allWords.length)]; // ひらがな単語（辞書側がひらがな）
+      const startWord = allWords[getRandomInt(allWords.length)];
       previousWord = startWord;
       usedWords.push(startWord);
       requiredInitial = getValidLastChar(startWord);
@@ -187,6 +185,7 @@ function resetGame() {
       scrollLogToBottom();
       startTimer();
       updateDisplays();
+      document.getElementById('submitBtn').disabled = false;
     })
     .catch(err => {
       console.error('辞書読み込みエラー', err);
@@ -226,13 +225,28 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   let raw = inputEl.value.trim();
   if (!raw) return;
 
-  // ひらがな化（カタカナが入ったときのため）
   const wordHira = katakanaToHiragana(raw);
 
-  // 辞書読み込みしてバリデート（重複チェック、辞書内存在チェック、始まり文字チェック）
   fetch('./data/words_large_corrected.json')
     .then(res => res.json())
     .then(dictionary => {
+      // ✅ まず「ん」で終わったかチェック
+      if (getValidLastChar(wordHira) === 'ん') {
+        const log = document.getElementById('log');
+        const playerEntry = document.createElement('div');
+        playerEntry.textContent = `🧑 プレイヤー: ${wordHira}`;
+        log.appendChild(playerEntry);
+
+        const endEntry = document.createElement('div');
+        endEntry.textContent = `❌『ん』で終わったため、ゲームオーバー！`;
+        log.appendChild(endEntry);
+        scrollLogToBottom();
+
+        endGame("❌『ん』で終わったため、ゲームオーバー！");
+        return; // ← コンピューターには進まない
+      }
+
+      // 辞書チェック
       if (!isWordInDictionaryAsHiragana(wordHira, dictionary)) {
         alert("❌ この単語は辞書に登録されていません。");
         return;
@@ -242,7 +256,6 @@ document.getElementById('submitBtn').addEventListener('click', () => {
         return;
       }
 
-      // 前の単語の末尾に従うか（前回がある場合）、最初の語の必要頭文字と一致するか
       if (previousWord) {
         const expected = getValidLastChar(previousWord);
         if (getValidFirstChar(wordHira) !== expected) {
@@ -254,10 +267,8 @@ document.getElementById('submitBtn').addEventListener('click', () => {
         return;
       }
 
-      // プレイヤーの単語をログに追加（表示は入力そのまま or ひらがな化した形にするかは好みで）
       const log = document.getElementById('log');
       const playerEntry = document.createElement('div');
-      // 表示は元入力（raw） か ひらがな（wordHira）か選べる。ここではひらがなで統一
       playerEntry.textContent = `🧑 プレイヤー: ${wordHira}`;
       log.appendChild(playerEntry);
 
