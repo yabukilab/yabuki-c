@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <div class="container">
     <h2>新規登録</h2>
     <form action="register.php" method="post">
-      <input type="text" name="userid" placeholder="ID" required value="<?= htmlspecialchars($userid) ?>" />
+      <input type="text" name="userid" placeholder="ID(6文字以上)" required value="<?= htmlspecialchars($userid) ?>" />
       <input type="password" name="password" placeholder="パスワード（6文字以上）" required />
       <?php if (!empty($message)): ?>
         <div class="<?= strpos($message, '✅') !== false ? 'success' : 'error' ?>">
